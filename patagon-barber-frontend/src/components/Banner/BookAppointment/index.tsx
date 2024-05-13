@@ -32,7 +32,7 @@ export default function BookAppointment() {
     setAppointment(appointment).then((res) => console.log(res))
   }
 
-  function handleCancel() {
+  function closeReservationModal() {
     setShowModal(false)
   }
 
@@ -48,7 +48,7 @@ export default function BookAppointment() {
       {showModal ? (
         <ReservationModal
           handleAccept={handleAccept}
-          handleCancel={handleCancel}
+          handleCancel={closeReservationModal}
         ></ReservationModal>
       ) : null}
     </div>
