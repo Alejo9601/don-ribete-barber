@@ -4,6 +4,7 @@ import CancelSVG from '../SVGIcons/CancelSVG'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Client } from '../../types/Client'
 import { Appointment } from '../../types/Appointment'
+import { FormInput } from '../FormInput'
 
 const defaultDate = dayjs()
 const initialClientState: Client = {
@@ -110,45 +111,34 @@ const ReservationModal = ({
         <div className="self-end cursor-pointer" onClick={closeModal}>
           <CancelSVG></CancelSVG>
         </div>
-        <label className="flex flex-col" htmlFor="client-name">
-          Nombre
-          <input
-            className="bg-blue-300 p-2 rounded-lg text-black font-semibold"
-            name="client-name"
-            placeholder="Alejandro"
-            required={true}
-            onChange={onClientNameChange}
-          />
-        </label>
-        <label className="flex flex-col" htmlFor="client-lastname">
-          Apellido
-          <input
-            className="bg-blue-300 p-2 rounded-lg text-black font-semibold"
-            name="client-lastname"
-            placeholder="Juarez"
-            required={true}
-            onChange={onClientLastnameChange}
-          />
-        </label>
-        <label className="flex flex-col" htmlFor="client-email">
-          E-mail
-          <input
-            className="bg-blue-300 p-2 rounded-lg text-black font-semibold"
-            name="client-email"
-            placeholder="alejandro96@gmail.com"
-            onChange={onClientEmailChange}
-          />
-        </label>
-        <label className="flex flex-col" htmlFor="client-phone-number">
-          Nro. Telefono
-          <input
-            className="bg-blue-300 p-2 rounded-lg text-black font-semibold"
-            name="client-phone-number"
-            placeholder="2966484800"
-            required={true}
-            onChange={onClientPhoneNumberChange}
-          />
-        </label>
+        <FormInput
+          name="client-name"
+          label="Nombre"
+          placeholder="Alejandro"
+          required={true}
+          onChange={onClientNameChange}
+        />
+        <FormInput
+          name="client-lastname"
+          label="Apellido"
+          placeholder="Juarez"
+          required={true}
+          onChange={onClientLastnameChange}
+        />
+        <FormInput
+          name="client-email"
+          label="E-mail"
+          placeholder="alejandro96@gmail.com"
+          required={false}
+          onChange={onClientEmailChange}
+        />
+        <FormInput
+          name="client-phone-number"
+          label="Telefono"
+          placeholder="2966484800"
+          required={true}
+          onChange={onClientPhoneNumberChange}
+        />
         <DateTimePicker
           defaultValue={defaultDate}
           disablePast={true}
