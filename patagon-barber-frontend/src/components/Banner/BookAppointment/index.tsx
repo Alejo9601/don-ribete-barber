@@ -3,16 +3,27 @@ import Button from '../../Button'
 import ReservationModal from '../../ReservationModal'
 import { setAppointment } from '../../../services/appointmentServices'
 import { Appointment } from '../../../types/Appointment'
+import { ReservationStatusModal } from '../../ReservationStatusModal'
+
+enum reservationStates {
+  'STORING',
+  'FINISHED'
+}
 
 export default function BookAppointment() {
   const [showModal, setShowModal] = useState(false)
+  const [status, setStatus] = useState<reservationStates | null>(null)
 
   function handleOnClick() {
     setShowModal(!showModal)
   }
 
   function onReservationFormSubmit(appointment: Appointment) {
-    setAppointment(appointment)
+    setStatus(reservationStates.STORING)
+    setAppointment(appointment).then(() => {
+      setStatus(reservationStates.FINISHED)
+      setTimeout(() => setStatus(null), 1000) // This could be removed and let user to handle close
+    })
   }
 
   function closeReservationModal() {
@@ -33,6 +44,9 @@ export default function BookAppointment() {
           onReservationSubmit={onReservationFormSubmit}
           closeModal={closeReservationModal}
         ></ReservationModal>
+      ) : null}
+      {status === reservationStates.FINISHED ? (
+        <ReservationStatusModal></ReservationStatusModal>
       ) : null}
     </div>
   )

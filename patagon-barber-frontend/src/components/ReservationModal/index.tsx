@@ -1,10 +1,11 @@
 import { DateTimePicker } from '@mui/x-date-pickers'
 import dayjs, { Dayjs } from 'dayjs'
-import CancelSVG from '../SVGIcons/CancelSVG'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Client } from '../../types/Client'
 import { Appointment } from '../../types/Appointment'
 import { FormInput } from '../FormInput'
+import { ModalWrapper } from '../ModalWrapper'
+import { ModalClosingButton } from '../ModalClosingButton'
 
 const defaultDate = dayjs()
 const initialClientState: Client = {
@@ -103,14 +104,12 @@ const ReservationModal = ({
   }
 
   return (
-    <div className="h-screen w-screen fixed top-0 right-0 z-[1] flex flex-col items-center justify-center bg-black bg-opacity-75">
+    <ModalWrapper>
       <form
         onSubmit={handleFormSubmit}
         className="bg-white flex flex-col gap-4 min-w-80 p-5 rounded-sm"
       >
-        <div className="self-end cursor-pointer" onClick={closeModal}>
-          <CancelSVG></CancelSVG>
-        </div>
+        <ModalClosingButton onClick={closeModal} />
         <FormInput
           name="client-name"
           label="Nombre"
@@ -154,7 +153,7 @@ const ReservationModal = ({
           value="Agendar"
         />
       </form>
-    </div>
+    </ModalWrapper>
   )
 }
 
