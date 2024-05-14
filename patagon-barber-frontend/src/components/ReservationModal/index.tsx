@@ -115,6 +115,7 @@ const ReservationModal = ({
           label="Nombre"
           placeholder="Alejandro"
           required={true}
+          maxLength={30}
           onChange={onClientNameChange}
         />
         <FormInput
@@ -122,12 +123,14 @@ const ReservationModal = ({
           label="Apellido"
           placeholder="Juarez"
           required={true}
+          maxLength={30}
           onChange={onClientLastnameChange}
         />
         <FormInput
           name="client-email"
           label="E-mail"
           placeholder="alejandro96@gmail.com"
+          maxLength={40}
           onChange={onClientEmailChange}
         />
         <FormInput
@@ -135,6 +138,7 @@ const ReservationModal = ({
           label="Telefono"
           placeholder="2966484800"
           required={true}
+          maxLength={40}
           onChange={onClientPhoneNumberChange}
         />
         <DateTimePicker
