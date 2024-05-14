@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import Button from '../../Button'
 import ReservationModal from '../../ReservationModal'
-import dayjs from 'dayjs'
 import { setAppointment } from '../../../services/appointmentServices'
 import { Appointment } from '../../../types/Appointment'
 
@@ -12,24 +11,8 @@ export default function BookAppointment() {
     setShowModal(!showModal)
   }
 
-  function handleAccept(date) {
-    const dateToStore = dayjs(date).format('YYYY-MM-DD HH:00')
-
-    const appointment: Appointment = {
-      id: undefined,
-      date: dateToStore.split(' ')[0],
-      time: dateToStore.split(' ')[1],
-      client: {
-        id: undefined,
-        name: 'luis',
-        lastname: 'alejandro',
-        email: 'alejandro96jm@gmail.com',
-        phone_number: '2902484800'
-      },
-      service: undefined
-    }
-
-    setAppointment(appointment).then((res) => console.log(res))
+  function onReservationFormSubmit(appointment: Appointment) {
+    setAppointment(appointment)
   }
 
   function closeReservationModal() {
@@ -47,8 +30,8 @@ export default function BookAppointment() {
       <Button onClick={handleOnClick}>Agendar cita</Button>
       {showModal ? (
         <ReservationModal
-          handleAccept={handleAccept}
-          handleCancel={closeReservationModal}
+          onReservationSubmit={onReservationFormSubmit}
+          closeModal={closeReservationModal}
         ></ReservationModal>
       ) : null}
     </div>

@@ -33,7 +33,6 @@ export async function setAppointment(appointment: Appointment) {
 
   return fetch('http://localhost:3000/api/appointments', options)
     .then((response) => {
-      console.log(response)
       if (!response.ok) {
         throw new Error('Failed creating appointment')
       }

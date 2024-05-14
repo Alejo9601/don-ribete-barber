@@ -3,7 +3,7 @@ import { Service } from './Services'
 
 export interface Appointment {
   id: number | undefined
-  client: Client
+  client: Client | undefined
   date: string
   time: string
   service: Service | undefined
