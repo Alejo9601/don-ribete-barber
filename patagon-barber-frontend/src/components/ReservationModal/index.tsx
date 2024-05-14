@@ -128,7 +128,6 @@ const ReservationModal = ({
           name="client-email"
           label="E-mail"
           placeholder="alejandro96@gmail.com"
-          required={false}
           onChange={onClientEmailChange}
         />
         <FormInput
