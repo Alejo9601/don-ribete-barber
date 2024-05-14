@@ -9,13 +9,22 @@ export default function SocialNetworks({ onHeader }: { onHeader: boolean }) {
       className={`${onHeader ? 'hidden lg:flex' : 'flex'} h-7 gap-5 w-fit px-14`}
     >
       <ClickableListItem>
-        <Facebook></Facebook>
+        <a href="" target="_blank">
+          <Facebook></Facebook>
+        </a>
       </ClickableListItem>
       <ClickableListItem>
-        <Instagram></Instagram>
+        <a
+          href="https://www.instagram.com/barberia_chicosdelbarrio28_/"
+          target="_blank"
+        >
+          <Instagram></Instagram>
+        </a>
       </ClickableListItem>
       <ClickableListItem>
-        <WhatsApp></WhatsApp>
+        <a href="https://wa.me/5492966384685" target="_blank">
+          <WhatsApp></WhatsApp>
+        </a>
       </ClickableListItem>
     </ul>
   )
