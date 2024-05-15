@@ -4,6 +4,7 @@ import BusinessServices from '../components/BusinessServices'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
+import { PreFooter } from '../components/PreFooter'
 
 const Home = () => {
   const observer = useIntersectionObserver()
@@ -31,6 +32,7 @@ const Home = () => {
           ¿Que servicios ofrecemos?
         </h1>
         <BusinessServices></BusinessServices>
+        <PreFooter></PreFooter>
       </main>
       <Footer></Footer>
     </>

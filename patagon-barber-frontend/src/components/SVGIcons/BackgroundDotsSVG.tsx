@@ -2,7 +2,7 @@ function BackgroundDotsSVG() {
   return (
     <svg
       fill="none"
-      className="absolute max-h-[300px] w-1/2 right-[25%] top-[15%] text-slate-500 z-[1] opacity-70"
+      className="absolute w-96 h-96 text-slate-500 z-[1] top-[10%] left-[5%] opacity-80 rotate-45"
       viewBox="0 0 404 392"
     >
       <defs>
