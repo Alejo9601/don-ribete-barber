@@ -11,7 +11,7 @@ export class AppointmentDB {
 
   getAll() {
     return client.execute({
-      sql: 'SELECT appointments.id,date,time,name,lastname,phone_number FROM appointments JOIN clients ON appointments.client_id = clients.id ORDER BY date ASC',
+      sql: 'SELECT appointments.id,date,time,clients.id AS client_id,name,lastname,email,phone_number FROM appointments JOIN clients ON appointments.client_id = clients.id ORDER BY date ASC',
       args: []
     })
   }

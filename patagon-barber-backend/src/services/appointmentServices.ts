@@ -6,9 +6,15 @@ import { createClient } from './clientServices'
 function normalizeAppointment(appointmentData: any) {
   const appointment: Appointment = {
     id: appointmentData.id,
-    client: undefined,
     date: appointmentData.date,
     time: appointmentData.time,
+    client: {
+      id: appointmentData.client_id || undefined,
+      name: appointmentData.name || undefined,
+      lastname: appointmentData.lastname || undefined,
+      email: appointmentData.email || undefined,
+      phone_number: appointmentData.phone_number || undefined
+    },
     service: { id: 1, name: 'cut', price: '10', appointment: undefined }
   }
   return appointment
@@ -18,7 +24,16 @@ export async function getAllAppointments() {
   const appDB = new AppointmentDB()
   try {
     const result = await appDB.getAll()
-    return result.rows
+    const listOfAppointments: Appointment[] = []
+
+    result.rows.forEach((appointment) => {
+      const newAppointment = normalizeAppointment(appointment)
+      listOfAppointments.push(newAppointment)
+    })
+
+    console.log(listOfAppointments)
+
+    return JSON.stringify(listOfAppointments)
   } catch (error) {
     console.log(error)
   }

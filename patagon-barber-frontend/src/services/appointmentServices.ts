@@ -1,5 +1,28 @@
 import { Appointment } from '../types/Appointment'
 
+// function normalizeAppointment(appointmentData: any) {
+//   const appointment: Appointment = {
+//     id: appointmentData.id,
+//     client: undefined,
+//     date: appointmentData.date,
+//     time: appointmentData.time,
+//     service: undefined
+//   }
+//   return appointment
+// }
+
+// // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// function normalizeClient(clientData: any) {
+//   const client: Client = {
+//     id: undefined,
+//     name: clientData.name,
+//     lastname: clientData.lastname,
+//     email: clientData.email,
+//     phone_number: clientData.phone_number
+//   }
+//   return client
+// }
+
 export async function getAppointments() {
   const options: RequestInit = {
     mode: 'cors',
