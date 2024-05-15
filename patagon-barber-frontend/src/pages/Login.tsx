@@ -8,7 +8,7 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [location, navigate] = useLocation()
+  const [, navigate] = useLocation()
   const { login } = useUser()
 
   async function handleLogin(ev: FormEvent) {
