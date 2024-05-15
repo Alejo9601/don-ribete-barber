@@ -5,7 +5,7 @@ import ListOfAppointments from '../components/ListOfAppointments'
 
 const AdminPanel = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [location, navigate] = useLocation()
+  const [, navigate] = useLocation()
   const { user } = useUser()
 
   return (
