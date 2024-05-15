@@ -1,10 +1,6 @@
 import ServiceContainer from './ServiceContainer'
 import ServiceDescription from './ServiceDescription'
-import cut1 from '../../assets/images/cut1.webp'
-import cut2 from '../../assets/images/cut2.webp'
-import cut3 from '../../assets/images/cut3.webp'
-
-const cutImages = [cut1, cut2, cut3]
+import services from '../../assets/json/services.json'
 
 function isOddIndex(index: number) {
   return index % 2 !== 0
@@ -13,12 +9,14 @@ function isOddIndex(index: number) {
 const BusinessServices = () => {
   return (
     <>
-      {cutImages.map((cutImage, index) => {
+      {services.map((service, index) => {
         return (
           <ServiceContainer reversed={isOddIndex(index)} key={index}>
             <ServiceDescription
+              descHeading={service.descHeading}
+              descParagraph={service.descParagraph}
               reversed={isOddIndex(index)}
-              descImage={cutImage}
+              descImage={service.descImage}
             ></ServiceDescription>
           </ServiceContainer>
         )

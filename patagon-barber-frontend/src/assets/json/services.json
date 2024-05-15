@@ -1,0 +1,17 @@
+[
+  {
+    "descHeading": "Cortes Modernos",
+    "descParagraph": "Ven y transforma tu apariencia con un corte moderno. ¿Prefieres destacar entre la multitud? No hay problema, personalizamos tu corte de acuerdo a tus preferencias únicas.",
+    "descImage": "src/assets/images/cut1.webp"
+  },
+  {
+    "descHeading": "Barba",
+    "descParagraph": "Si eres un entusiasta de las barbas prominentes, estás en el lugar correcto. Aquí, no solo complementamos tu corte de cabello, sino que también ofrecemos el tratamiento de barba que necesitas para mantenerla en su mejor forma.",
+    "descImage": "src/assets/images/cut2.webp"
+  },
+  {
+    "descHeading": "Perfilados",
+    "descParagraph": "Transformamos tus cejas con precisión y estilo, trabajamos para lograr un equilibrio perfecto y simétrico resaltando tu rostro. ",
+    "descImage": "src/assets/images/cut3.webp"
+  }
+]
