@@ -3,6 +3,10 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      backgroundImage: {
+        cover_pattern:
+          "linear-gradient(to right,transparent,95%,rgba(0,0,0,1)),linear-gradient(to left,transparent,95%,rgba(0,0,0,1)),linear-gradient(to bottom,transparent,95%,rgba(0,0,0,1)),linear-gradient(to top,transparent,95%,rgba(0,0,0,1)),url('assets/images/cover.webp')"
+      },
       keyframes: {
         slide_left: {
           '0%': { opacity: 0, transform: 'translateX(-200px)' },
