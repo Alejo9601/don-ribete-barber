@@ -4,6 +4,7 @@ import services from '../../assets/json/services.json'
 import Beard from '../../assets/images/beard.webp'
 import Haircut from '../../assets/images/haircut.webp'
 import Eyebrow from '../../assets/images/eyebrow.webp'
+import { WithMarginWrapper } from '../WithMarginWrapper'
 
 const descImages = [Haircut, Beard, Eyebrow]
 
@@ -13,7 +14,7 @@ function isOddIndex(index: number) {
 
 const BusinessServices = () => {
   return (
-    <>
+    <WithMarginWrapper>
       {services.map((service, index) => {
         return (
           <ServiceContainer reversed={isOddIndex(index)} key={index}>
@@ -26,7 +27,7 @@ const BusinessServices = () => {
           </ServiceContainer>
         )
       })}
-    </>
+    </WithMarginWrapper>
   )
 }
 
