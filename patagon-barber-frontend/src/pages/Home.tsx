@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 import { PreFooter } from '../components/PreFooter'
+import { EmbeddedMap } from '../components/EmbeddedMap'
 
 const Home = () => {
   const observer = useIntersectionObserver()
@@ -27,12 +28,13 @@ const Home = () => {
         <Header></Header>
         <Banner></Banner>
       </section>
-      <main className="flex flex-col gap-20 py-20 bg-black overflow-x-hidden">
+      <main className="flex flex-col gap-20 py-20 bg-black ">
         <h1 className="text-center text-5xl text-white font-extrabold">
           ¿Que servicios ofrecemos?
         </h1>
         <BusinessServices></BusinessServices>
         <PreFooter></PreFooter>
+        <EmbeddedMap />
       </main>
       <Footer></Footer>
     </>

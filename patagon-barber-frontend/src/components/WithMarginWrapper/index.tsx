@@ -8,7 +8,7 @@ export function WithMarginWrapper({
   customClasses?: string
 }) {
   return (
-    <section className={`px-28 md:px-40 lg:px-32 xl:px-52 ${customClasses}`}>
+    <section className={`px-20 md:px-40 lg:px-32 xl:px-52 ${customClasses}`}>
       {children}
     </section>
   )
