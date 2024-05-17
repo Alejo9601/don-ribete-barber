@@ -2,7 +2,7 @@
 
 const SectionLink = ({ children }: { children: string }) => {
   return (
-    <a className="text-white text-2xl lg:text-lg p-5 cursor-pointer">
+    <a className="text-white text-2xl lg:text-lg p-5 cursor-pointer hover:text-cyan-600 transition">
       {children}
     </a>
   )
