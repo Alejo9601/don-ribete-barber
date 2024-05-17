@@ -1,10 +1,16 @@
-// import { Link } from 'wouter';
+import { Link } from 'wouter'
 
-const SectionLink = ({ children }: { children: string }) => {
+const SectionLink = ({
+  children,
+  refTo = ''
+}: {
+  children: string
+  refTo?: string
+}) => {
   return (
-    <a className="text-white text-2xl lg:text-lg p-5 cursor-pointer hover:text-cyan-600 transition">
-      {children}
-    </a>
+    <li className="text-white text-2xl lg:text-lg p-5 cursor-pointer hover:text-cyan-600 transition">
+      <Link href={refTo}>{children}</Link>
+    </li>
   )
 }
 
