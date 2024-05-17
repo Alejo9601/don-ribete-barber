@@ -31,11 +31,11 @@ export default function BookAppointment() {
   }
 
   return (
-    <div className="absolute z-[1] lg:relative w-1/2">
-      <h1 className="text-white text-5xl lg:text-7xl font-extrabold">
+    <div className="z-[1] w-full lg:w-1/2">
+      <h1 className="text-white text-5xl md:text-7xl font-extrabold">
         Reserva tu cita online
       </h1>
-      <p className="text-gray-300 text-sm lg:text-xl mt-8">
+      <p className="text-gray-300 text-sm md:text-xl mt-8">
         ¡Agenda tu cita ahora con nuestro sistema de reservas en linea!
       </p>
       <Button onClick={handleOnClick}>Agendar cita</Button>
