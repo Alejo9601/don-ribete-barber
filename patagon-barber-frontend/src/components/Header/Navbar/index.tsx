@@ -18,7 +18,7 @@ const Navbar = () => {
         className={`${!showNav ? 'hidden' : 'flex'} absolute lg:relative bg-slate-900 lg:bg-transparent z-[4] lg:z-0 top-0 w-dvw lg:w-fit h-screen lg:h-fit right-0 flex-col items-center justify-center lg:flex lg:flex-row`}
       >
         <SectionLink>Acerca de</SectionLink>
-        <SectionLink>Galeria de Cortes</SectionLink>
+        <SectionLink refTo="/gallery">Galeria de Cortes</SectionLink>
         <SectionLink>Contacto</SectionLink>
       </ul>
     </nav>

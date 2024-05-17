@@ -6,6 +6,7 @@ import AdminPanel from './pages/AdminPanel'
 import { UserContextProvider } from './context/UserContext'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { Gallery } from './pages/Gallery'
 
 function App() {
   return (
@@ -17,6 +18,9 @@ function App() {
           </Route>
           <Route path="/home">
             <Home></Home>
+          </Route>
+          <Route path="/gallery">
+            <Gallery />
           </Route>
 
           <Route path="/admin-panel">
