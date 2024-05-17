@@ -1,5 +1,3 @@
-import { WithMarginWrapper } from '../WithMarginWrapper'
-
 const ServiceContainer = ({
   children,
   reversed
