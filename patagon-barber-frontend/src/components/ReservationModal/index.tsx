@@ -1,13 +1,14 @@
-import { DateTimePicker } from '@mui/x-date-pickers'
+import { DatePicker, TimePicker } from '@mui/x-date-pickers'
 import dayjs, { Dayjs } from 'dayjs'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { Client } from '../../types/Client'
 import { Appointment } from '../../types/Appointment'
 import { FormInput } from '../FormInput'
 import { ModalWrapper } from '../ModalWrapper'
 import { ModalClosingButton } from '../ModalClosingButton'
 
-const defaultDate = dayjs()
+const defaultDate = dayjs().hour(15).minute(0)
+
 const initialClientState: Client = {
   id: undefined,
   name: '',
@@ -35,8 +36,6 @@ const ReservationModal = ({
     initialAppointmentState
   )
 
-  console.log(appointmentData)
-
   const disabledDates = ['2024-05-15', '2024-05-11', '2024-05-19']
 
   function shouldDisableDate(date: Dayjs) {
@@ -44,9 +43,9 @@ const ReservationModal = ({
     return disabledDates.includes(dateString)
   }
 
-  // function shouldDisableTime(time: Dayjs) {
-  //   const hour = time.hour()
-  //   if (hour < 0) return true
+  // function shouldDisableTime(dateTime: Dayjs) {
+  //   const hour = Number(dateTime.toISOString().split('T')[1].split(':')[0])
+
   //   return false
   // }
 
@@ -82,18 +81,27 @@ const ReservationModal = ({
     }))
   }
 
-  function onDateTimeAccept(date: Dayjs | null) {
+  function onDateAccept(date: Dayjs | null) {
     if (date === null) return // Here must be a feedback to user
 
     const settledDate = dayjs(date).format('YYYY-MM-DD HH:00')
     const dateValue = settledDate.split(' ')[0]
+
+    setAppointmentData((prevState) => ({
+      ...prevState,
+      date: dateValue
+    }))
+  }
+
+  function onTimeAccept(date: Dayjs | null) {
+    if (date === null) return // Here must be a feedback to user
+
+    const settledDate = dayjs(date).format('YYYY-MM-DD HH:00')
     const timeValue = settledDate.split(' ')[1]
 
     setAppointmentData((prevState) => ({
       ...prevState,
-      date: dateValue,
-      time: timeValue,
-      client: clientData
+      time: timeValue
     }))
   }
 
@@ -102,6 +110,13 @@ const ReservationModal = ({
     onReservationSubmit(appointmentData)
     closeModal()
   }
+
+  useEffect(() => {
+    setAppointmentData((prevState) => ({
+      ...prevState,
+      client: clientData
+    }))
+  }, [clientData])
 
   return (
     <ModalWrapper>
@@ -141,15 +156,26 @@ const ReservationModal = ({
           maxLength={40}
           onChange={onClientPhoneNumberChange}
         />
-        <DateTimePicker
+        <DatePicker
           defaultValue={defaultDate}
           disablePast={true}
           showDaysOutsideCurrentMonth={false}
           shouldDisableDate={shouldDisableDate}
-          // shouldDisableTime={shouldDisableTime}
-          onAccept={onDateTimeAccept}
-          views={['year', 'month', 'day', 'hours']}
-        ></DateTimePicker>
+          onAccept={onDateAccept}
+          views={['year', 'month', 'day']}
+          maxDate={defaultDate.endOf('month')}
+          minDate={defaultDate.startOf('month')}
+        ></DatePicker>
+        <TimePicker
+          defaultValue={defaultDate}
+          disablePast={true}
+          maxTime={dayjs().set('hour', 20)}
+          minTime={dayjs().set('hour', 15)}
+          ampm={false}
+          ampmInClock={false}
+          minutesStep={60}
+          onAccept={onTimeAccept}
+        ></TimePicker>
         <input
           type="submit"
           className="py-2 px-5 mt-1 bg-cyan-600 text-white font-bold rounded-md "
