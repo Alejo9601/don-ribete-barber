@@ -1,15 +1,7 @@
-import { useEffect, useState } from 'react'
-import { getAppointments } from '../../services/appointmentServices'
-import { Appointment } from '../../types/Appointment'
+import { useAppointments } from '../../hooks/useAppointments'
 
 const ListOfAppointments = () => {
-  const [appointments, setAppointments] = useState<Appointment[]>()
-
-  useEffect(() => {
-    getAppointments().then((response) => {
-      setAppointments(response)
-    })
-  }, [])
+  const appointments = useAppointments()
 
   return (
     <div className="w-3/4 overflow-y-auto flex flex-col gap-10 py-10 px-20">
