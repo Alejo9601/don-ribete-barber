@@ -1,40 +1,43 @@
 import { DatePicker, TimePicker } from '@mui/x-date-pickers'
 import dayjs, { Dayjs } from 'dayjs'
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react'
 import { Client } from '../../types/Client'
 import { Appointment } from '../../types/Appointment'
 import { FormInput } from '../FormInput'
 import { ModalWrapper } from '../ModalWrapper'
 import { ModalClosingButton } from '../ModalClosingButton'
+import { ReservationContext } from '../../context/reservationContext'
 
 const defaultDate = dayjs().hour(15).minute(0)
 
-const initialClientState: Client = {
-  id: undefined,
-  name: '',
-  lastname: '',
-  email: '',
-  phone_number: ''
-}
-const initialAppointmentState: Appointment = {
-  id: undefined,
-  client: undefined,
-  date: '',
-  time: '',
-  service: undefined
-}
+// const initialClientState: Client = {
+//   id: undefined,
+//   name: '',
+//   lastname: '',
+//   email: '',
+//   phone_number: ''
+// }
+// const initialAppointmentState: Appointment = {
+//   id: undefined,
+//   client: undefined,
+//   date: '',
+//   time: '',
+//   service: undefined
+// }
 
 const ReservationModal = ({
   onReservationSubmit,
   closeModal
 }: {
-  onReservationSubmit: (appointment: Appointment) => void
+  onReservationSubmit: () => void
   closeModal: () => void
 }) => {
-  const [clientData, setClientData] = useState<Client>(initialClientState)
-  const [appointmentData, setAppointmentData] = useState<Appointment>(
-    initialAppointmentState
-  )
+  // const [clientData, setClientData] = useState<Client>(initialClientState)
+  // const [appointmentData, setAppointmentData] = useState<Appointment>(
+  //   initialAppointmentState
+  // )
+
+  const reservation = useContext(ReservationContext)
 
   const disabledDates = ['2024-05-15', '2024-05-11', '2024-05-19']
 
@@ -51,34 +54,38 @@ const ReservationModal = ({
 
   function onClientNameChange(event: ChangeEvent<HTMLInputElement>) {
     const newValue = event.currentTarget.value
-    setClientData((prevState) => ({
-      ...prevState,
+    const { ...props } = reservation?.client
+    reservation?.updateClient({
+      ...props,
       name: newValue
-    }))
+    })
   }
 
   function onClientLastnameChange(event: ChangeEvent<HTMLInputElement>) {
     const newValue = event.currentTarget.value
-    setClientData((prevState) => ({
-      ...prevState,
+    const { ...props } = reservation?.client
+    reservation?.updateClient({
+      ...props,
       lastname: newValue
-    }))
+    })
   }
 
   function onClientEmailChange(event: ChangeEvent<HTMLInputElement>) {
     const newValue = event.currentTarget.value
-    setClientData((prevState) => ({
-      ...prevState,
+    const { ...props } = reservation?.client
+    reservation?.updateClient({
+      ...props,
       email: newValue
-    }))
+    })
   }
 
   function onClientPhoneNumberChange(event: ChangeEvent<HTMLInputElement>) {
     const newValue = event.currentTarget.value
-    setClientData((prevState) => ({
-      ...prevState,
+    const { ...props } = reservation?.client
+    reservation?.updateClient({
+      ...props,
       phone_number: newValue
-    }))
+    })
   }
 
   function onDateAccept(date: Dayjs | null) {
@@ -87,10 +94,11 @@ const ReservationModal = ({
     const settledDate = dayjs(date).format('YYYY-MM-DD HH:00')
     const dateValue = settledDate.split(' ')[0]
 
-    setAppointmentData((prevState) => ({
-      ...prevState,
+    const { ...props } = reservation?.appointment
+    reservation?.updateAppointment({
+      ...props,
       date: dateValue
-    }))
+    })
   }
 
   function onTimeAccept(date: Dayjs | null) {
@@ -99,24 +107,18 @@ const ReservationModal = ({
     const settledDate = dayjs(date).format('YYYY-MM-DD HH:00')
     const timeValue = settledDate.split(' ')[1]
 
-    setAppointmentData((prevState) => ({
-      ...prevState,
-      time: timeValue
-    }))
+    const { ...props } = reservation?.appointment
+    reservation?.updateAppointment({
+      ...props,
+      date: timeValue
+    })
   }
 
   function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    onReservationSubmit(appointmentData)
+    onReservationSubmit()
     closeModal()
   }
-
-  useEffect(() => {
-    setAppointmentData((prevState) => ({
-      ...prevState,
-      client: clientData
-    }))
-  }, [clientData])
 
   return (
     <ModalWrapper>

@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Button from '../../Button'
 import ReservationModal from '../../ReservationModal'
 import { setAppointment } from '../../../services/appointmentServices'
-import { Appointment } from '../../../types/Appointment'
 import { ReservationStatusModal } from '../../ReservationStatusModal'
+import { ReservationContext } from '../../../context/reservationContext'
 
 enum reservationStates {
   'STORING',
@@ -13,14 +13,18 @@ enum reservationStates {
 export default function BookAppointment() {
   const [showModal, setShowModal] = useState(false)
   const [status, setStatus] = useState<reservationStates | null>(null)
+  const reservation = useContext(ReservationContext)
 
   function handleOnClick() {
     setShowModal(!showModal)
   }
 
-  function onReservationFormSubmit(appointment: Appointment) {
+  function onReservationFormSubmit() {
     setStatus(reservationStates.STORING)
-    setAppointment(appointment).then(() => {
+
+    if (reservation?.appointment === undefined) return
+
+    setAppointment(reservation?.appointment).then(() => {
       setStatus(reservationStates.FINISHED)
       setTimeout(() => setStatus(null), 1000) // This could be removed and let user to handle close
     })
