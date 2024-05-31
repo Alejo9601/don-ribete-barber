@@ -5,6 +5,7 @@ import { setAppointment } from '../../../services/appointmentServices'
 import { ReservationStatusModal } from '../../ReservationStatusModal'
 import { ReservationContext } from '../../../context/reservationContext'
 import { Loader } from '../../Loader/Loader'
+import { ModalWrapper } from '../../ModalWrapper'
 
 enum reservationStates {
   'STORING',
@@ -54,7 +55,9 @@ export default function BookAppointment() {
       {status === reservationStates.FINISHED ? (
         <ReservationStatusModal></ReservationStatusModal>
       ) : status === null ? null : (
-        <Loader />
+        <ModalWrapper>
+          <Loader />
+        </ModalWrapper>
       )}
     </div>
   )
