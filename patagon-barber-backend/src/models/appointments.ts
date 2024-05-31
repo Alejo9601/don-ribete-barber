@@ -4,8 +4,8 @@ import { client } from './db_client'
 export class AppointmentDB {
   save(ap: Appointment, clientId: number) {
     return client.execute({
-      sql: 'INSERT INTO appointments (client_id,date,time) VALUES(?,?,?) RETURNING date, time',
-      args: [clientId, ap.date, ap.time]
+      sql: 'INSERT INTO appointments (client_id,date,time,status) VALUES(?,?,?,?) RETURNING date, time',
+      args: [clientId, ap.date, ap.time, ap.status]
     })
   }
 

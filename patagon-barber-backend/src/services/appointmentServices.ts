@@ -15,7 +15,7 @@ function normalizeAppointment(appointmentData: any) {
       email: appointmentData.email || undefined,
       phone_number: appointmentData.phone_number || undefined
     },
-    service: { id: 1, name: 'cut', price: '10', appointment: undefined }
+    status: 'PENDING'
   }
   return appointment
 }
