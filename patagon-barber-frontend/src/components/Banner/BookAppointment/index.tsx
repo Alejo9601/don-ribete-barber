@@ -4,6 +4,7 @@ import ReservationModal from '../../ReservationModal'
 import { setAppointment } from '../../../services/appointmentServices'
 import { ReservationStatusModal } from '../../ReservationStatusModal'
 import { ReservationContext } from '../../../context/reservationContext'
+import { Loader } from '../../Loader/Loader'
 
 enum reservationStates {
   'STORING',
@@ -20,11 +21,10 @@ export default function BookAppointment() {
   }
 
   function onReservationFormSubmit() {
-    setStatus(reservationStates.STORING)
-
     if (reservation?.appointment === undefined) return
 
-    setAppointment(reservation?.appointment).then(() => {
+    setStatus(reservationStates.STORING)
+    setAppointment(reservation.appointment).then(() => {
       setStatus(reservationStates.FINISHED)
       setTimeout(() => setStatus(null), 1000) // This could be removed and let user to handle close
     })
@@ -43,15 +43,19 @@ export default function BookAppointment() {
         ¡Agenda tu cita ahora con nuestro sistema de reservas en linea!
       </p>
       <Button onClick={handleOnClick}>Agendar cita</Button>
+
       {showModal ? (
         <ReservationModal
           onReservationSubmit={onReservationFormSubmit}
           closeModal={closeReservationModal}
         ></ReservationModal>
       ) : null}
+
       {status === reservationStates.FINISHED ? (
         <ReservationStatusModal></ReservationStatusModal>
-      ) : null}
+      ) : status === null ? null : (
+        <Loader />
+      )}
     </div>
   )
 }
