@@ -101,16 +101,16 @@ const ReservationModal = ({
     })
   }
 
-  function onTimeAccept(date: Dayjs | null) {
-    if (date === null) return // Here must be a feedback to user
+  function onTimeAccept(time: Dayjs | null) {
+    if (time === null) return // Here must be a feedback to user
 
-    const settledDate = dayjs(date).format('YYYY-MM-DD HH:00')
+    const settledDate = dayjs(time).format('YYYY-MM-DD HH:00')
     const timeValue = settledDate.split(' ')[1]
 
     const { ...props } = reservation?.appointment
     reservation?.updateAppointment({
       ...props,
-      date: timeValue
+      time: timeValue
     })
   }
 
