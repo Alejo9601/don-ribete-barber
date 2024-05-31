@@ -6,6 +6,7 @@ import { ReservationStatusModal } from '../../ReservationStatusModal'
 import { ReservationContext } from '../../../context/reservationContext'
 import { Loader } from '../../Loader/Loader'
 import { ModalWrapper } from '../../ModalWrapper'
+import HeadingText from '../HeadingText'
 
 enum reservationStates {
   'STORING',
@@ -37,12 +38,8 @@ export default function BookAppointment() {
 
   return (
     <div className="z-[1] w-full lg:w-1/2">
-      <h1 className="text-white text-5xl md:text-7xl font-extrabold">
-        Reserva tu cita online
-      </h1>
-      <p className="text-gray-300 text-sm md:text-xl mt-8">
-        ¡Agenda tu cita ahora con nuestro sistema de reservas en linea!
-      </p>
+      <HeadingText />
+
       <Button onClick={handleOnClick}>Agendar cita</Button>
 
       {showModal ? (
