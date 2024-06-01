@@ -12,15 +12,9 @@ enum reservationStates {
   'COMPLETING'
 }
 
-export default function ReservationModal({
-  closeModal
-}: {
-  closeModal: () => void
-}) {
+export default function ReservationModal({ closeModal }: { closeModal: () => void }) {
   const [showForm, setShowForm] = useState(true)
-  const [status, setStatus] = useState<reservationStates | null>(
-    reservationStates.COMPLETING
-  )
+  const [status, setStatus] = useState<reservationStates | null>(reservationStates.COMPLETING)
   const reservation = useContext(ReservationContext)
 
   useEffect(() => {
