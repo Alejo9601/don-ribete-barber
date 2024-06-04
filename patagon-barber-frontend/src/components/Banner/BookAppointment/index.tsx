@@ -1,13 +1,18 @@
 import Button from '../../Button'
 import HeadingText from '../HeadingText'
 import ReservationModal from '../../ReservationModal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import preventAppScroll from '../../../utils/preventAppScroll'
 
 export default function BookAppointment() {
   const [showModal, setShowModal] = useState(false)
 
+  useEffect(() => {
+    showModal ? preventAppScroll(true) : preventAppScroll(false)
+  }, [showModal])
+
   function handleOnClick() {
-    setShowModal(!showModal)
+    setShowModal(true)
   }
 
   function closeReservationModal() {

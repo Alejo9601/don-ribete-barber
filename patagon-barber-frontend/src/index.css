@@ -6,3 +6,8 @@
   box-sizing: border-box;
   outline: none;
 }
+
+.noscroll {
+  position: fixed;
+  overflow-y: scroll;
+}

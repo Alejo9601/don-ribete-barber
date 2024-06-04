@@ -9,32 +9,34 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 function App() {
   return (
-    <UserContextProvider>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Switch>
-          <Route path="/">
-            <Home></Home>
-          </Route>
-          <Route path="/home">
-            <Home></Home>
-          </Route>
+    <div className="App">
+      <UserContextProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Switch>
+            <Route path="/">
+              <Home></Home>
+            </Route>
+            <Route path="/home">
+              <Home></Home>
+            </Route>
 
-          <Route path="/admin-panel">
-            <Login></Login>
-          </Route>
-          <Route path="/admin-panel/login">
-            <Login></Login>
-          </Route>
-          <Route path="/admin-panel/home">
-            <AdminPanel></AdminPanel>
-          </Route>
+            <Route path="/admin-panel">
+              <Login></Login>
+            </Route>
+            <Route path="/admin-panel/login">
+              <Login></Login>
+            </Route>
+            <Route path="/admin-panel/home">
+              <AdminPanel></AdminPanel>
+            </Route>
 
-          <Route>
-            <NotFound></NotFound>
-          </Route>
-        </Switch>
-      </LocalizationProvider>
-    </UserContextProvider>
+            <Route>
+              <NotFound></NotFound>
+            </Route>
+          </Switch>
+        </LocalizationProvider>
+      </UserContextProvider>
+    </div>
   )
 }
 

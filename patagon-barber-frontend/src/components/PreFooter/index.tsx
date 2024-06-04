@@ -1,13 +1,18 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Button from '../Button'
 import ReservationModal from '../ReservationModal'
 import BackgroundDotsSVG from '../SVGIcons/BackgroundDotsSVG'
+import preventAppScroll from '../../utils/preventAppScroll'
 
 export function PreFooter() {
   const [showModal, setShowModal] = useState(false)
 
+  useEffect(() => {
+    showModal ? preventAppScroll(true) : preventAppScroll(false)
+  }, [showModal])
+
   function handleOnClick() {
-    setShowModal(!showModal)
+    setShowModal(true)
   }
 
   function closeReservationModal() {
