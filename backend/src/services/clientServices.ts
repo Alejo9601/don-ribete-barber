@@ -1,8 +1,7 @@
 import { ClientDB } from '../models/clients'
 import { Client } from '../types/Client'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function normalizeClient(clientData: any) {
+function normalizeClient(clientData: Client) {
   const client: Client = {
     id: undefined,
     name: clientData.name,
@@ -13,14 +12,13 @@ function normalizeClient(clientData: any) {
   return client
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function createClient(clientData: any) {
+export async function createClient(clientData: Client | undefined) {
+  if (!clientData) {
+    throw new Error('Client data is required')
+  }
+
   const clientToSave: Client = normalizeClient(clientData)
   const clientDB = new ClientDB()
-  try {
-    const savedClientId = Number((await clientDB.save(clientToSave)).rows[0].id)
-    return savedClientId
-  } catch (error) {
-    console.log(error)
-  }
+  const savedClientId = Number((await clientDB.save(clientToSave)).rows[0].id)
+  return savedClientId
 }

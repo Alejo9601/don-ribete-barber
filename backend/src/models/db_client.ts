@@ -1,7 +1,13 @@
 import { createClient } from '@libsql/client'
 
+const tursoUrl = process.env.TURSO_DB_URL
+const tursoAuthToken = process.env.TURSO_AUTH_TOKEN
+
+if (!tursoUrl || !tursoAuthToken) {
+  throw new Error('Missing TURSO_DB_URL or TURSO_AUTH_TOKEN environment variables')
+}
+
 export const client = createClient({
-  url: 'libsql://patagon-barber-alejo9601.turso.io',
-  authToken:
-    'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3MTcxODA2NDksImlkIjoiZDMzMjg5ZDItMTJmYy00ODYzLWE0NTQtZTk1YWNkNDViOWQzIn0.8fDa9RemSISDroyyuRpKUZvGtlZ_W6n2l1eaqRqDMqb3Q_qHPPzf-EeiE2wontTHGMSDJ4vY23UrVFdWBzJ_DQ'
+  url: tursoUrl,
+  authToken: tursoAuthToken
 })
