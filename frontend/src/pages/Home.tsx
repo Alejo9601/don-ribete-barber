@@ -1,14 +1,35 @@
 import { useEffect } from 'react'
 import BusinessServices from '../components/BusinessServices'
 import VisitorsHomeLayout from '../Layouts/VisitorsHomeLayout'
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 import { PreFooter } from '../components/PreFooter'
 import { EmbeddedMap } from '../components/EmbeddedMap'
 
 const Home = () => {
-  const observer = useIntersectionObserver()
-
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries, currentObserver) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove('opacity-0')
+            const entryChild = entry.target.firstElementChild
+
+            if (entryChild?.classList.contains('lg:flex-row-reverse')) {
+              entry.target.classList.add('animate-slide_right')
+            } else {
+              entry.target.classList.add('animate-slide_left')
+            }
+
+            currentObserver.unobserve(entry.target)
+          }
+        })
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.4
+      }
+    )
+
     const elementsToObserve = document.querySelectorAll('.service')
     elementsToObserve.forEach((entry) => {
       observer.observe(entry)
@@ -17,6 +38,7 @@ const Home = () => {
       elementsToObserve.forEach((entry) => {
         observer.unobserve(entry)
       })
+      observer.disconnect()
     }
   }, [])
 

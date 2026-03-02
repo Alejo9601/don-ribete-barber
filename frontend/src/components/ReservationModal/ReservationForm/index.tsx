@@ -36,11 +36,8 @@ export default function ReservationForm({
 
   const reservation = useContext(ReservationContext)
 
-  const disabledDates = ['2024-05-15', '2024-05-11', '2024-05-19']
-
   function shouldDisableDate(date: Dayjs) {
-    const dateString = date.toISOString().split('T')[0]
-    return disabledDates.includes(dateString)
+    return date.day() === 0
   }
 
   // function shouldDisableTime(dateTime: Dayjs) {
@@ -160,8 +157,6 @@ export default function ReservationForm({
         shouldDisableDate={shouldDisableDate}
         onAccept={onDateAccept}
         views={['year', 'month', 'day']}
-        maxDate={defaultDate.endOf('month')}
-        minDate={defaultDate.startOf('month')}
       ></DatePicker>
       <TimePicker
         defaultValue={defaultDate}

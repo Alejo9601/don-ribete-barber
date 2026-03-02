@@ -9,24 +9,36 @@ import { Loader } from '../Loader/Loader'
 enum reservationStates {
   'STORING',
   'FINISHED',
-  'COMPLETING'
+  'COMPLETING',
+  'ERROR'
 }
 
-export default function ReservationModal({ closeModal }: { closeModal: () => void }) {
+export default function ReservationModal({
+  closeModal
+}: {
+  closeModal: () => void
+}) {
   const [showForm, setShowForm] = useState(true)
-  const [status, setStatus] = useState<reservationStates | null>(reservationStates.COMPLETING)
+  const [status, setStatus] = useState<reservationStates | null>(
+    reservationStates.COMPLETING
+  )
   const reservation = useContext(ReservationContext)
 
   useEffect(() => {
     if (reservation?.appointment === undefined) return
 
     if (status === reservationStates.STORING) {
-      setAppointment(reservation.appointment).then(() => {
-        setStatus(reservationStates.FINISHED)
-        setTimeout(() => closeModal(), 1000) // This could be removed and let user to handle close
-      })
+      setAppointment(reservation.appointment)
+        .then(() => {
+          setStatus(reservationStates.FINISHED)
+          setTimeout(() => closeModal(), 1000)
+        })
+        .catch(() => {
+          setStatus(reservationStates.ERROR)
+          setShowForm(true)
+        })
     }
-  }, [status])
+  }, [closeModal, reservation, status])
 
   function onReservationFormSubmit() {
     setStatus(reservationStates.STORING)
@@ -45,6 +57,10 @@ export default function ReservationModal({ closeModal }: { closeModal: () => voi
         <ReservationStatusModal></ReservationStatusModal>
       ) : status === reservationStates.STORING ? (
         <Loader />
+      ) : status === reservationStates.ERROR ? (
+        <div className="rounded-sm bg-white px-5 py-4 text-red-600">
+          No se pudo guardar la reserva. Intente nuevamente.
+        </div>
       ) : null}
     </ModalWrapper>
   )

@@ -1,11 +1,12 @@
+import { ReactNode } from 'react'
+
 const Button = ({
   additionalProps = '',
   children,
   onClick
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   additionalProps?: string
-  children: any
+  children: ReactNode
   onClick: () => void
 }) => {
   return (
