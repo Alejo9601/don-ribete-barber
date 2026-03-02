@@ -1,4 +1,5 @@
 import { Appointment } from '../types/Appointment'
+import { getApiUrl } from '../utils/api'
 
 // function normalizeAppointment(appointmentData: any) {
 //   const appointment: Appointment = {
@@ -27,11 +28,12 @@ export async function getAppointments() {
   const options: RequestInit = {
     mode: 'cors',
     method: 'GET',
+    credentials: 'include',
     headers: {
       Accept: 'application/json'
     }
   }
-  return fetch('http://localhost:3000/api/appointments', options)
+  return fetch(getApiUrl('/api/appointments'), options)
     .then((response) => {
       if (!response.ok) {
         throw new Error('Failed to fetch appointments')
@@ -48,13 +50,14 @@ export async function setAppointment(appointment: Appointment) {
   const options: RequestInit = {
     mode: 'cors',
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(appointment)
   }
 
-  return fetch('http://localhost:3000/api/appointments', options)
+  return fetch(getApiUrl('/api/appointments'), options)
     .then((response) => {
       if (!response.ok) {
         throw new Error('Failed creating appointment')
@@ -63,6 +66,6 @@ export async function setAppointment(appointment: Appointment) {
     })
     .catch((error) => {
       console.error('Failed creating appointment')
-      return error
+      throw error
     })
 }

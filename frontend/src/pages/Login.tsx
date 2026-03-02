@@ -1,13 +1,12 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { getUser } from '../services/userServices'
-import { User } from '../types/User'
+import { loginUser } from '../services/userServices'
 import { useLocation } from 'wouter'
 import { useUser } from '../hooks/useUser'
 
 const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [errorMessage, setErrorMessage] = useState('')
   const [, navigate] = useLocation()
   const { login } = useUser()
 
@@ -15,9 +14,13 @@ const Login = () => {
     ev.preventDefault()
 
     if (username !== '' && password !== '') {
-      getUser(username, password).then((user: User) => {
-        login(user).then(() => navigate('/admin-panel/home', { replace: true }))
-      })
+      try {
+        const user = await loginUser(username, password)
+        await login(user)
+        navigate('/admin-panel/home', { replace: true })
+      } catch (_error) {
+        setErrorMessage('Invalid credentials')
+      }
     } else {
       alert('Please complete both "username" and "password" fields')
     }
@@ -39,6 +42,11 @@ const Login = () => {
           onSubmit={handleLogin}
           className="flex-auto flex flex-col justify-center items-center m-5"
         >
+          {errorMessage ? (
+            <p className="w-full rounded-md bg-red-100 px-3 py-2 text-sm text-red-700">
+              {errorMessage}
+            </p>
+          ) : null}
           <label className="w-full mt-2" htmlFor="username">
             Username
             <input
