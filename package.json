@@ -4,15 +4,19 @@
   "description": "monorepo multipackage for patagon-barber",
   "main": "index.js",
   "workspaces": [
-    "patagon-barber-frontend",
-    "patagon-barber-backend"
+    "frontend",
+    "backend"
   ],
   "scripts": {
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "npm --prefix backend run start",
+    "start:frontend": "npm --prefix frontend run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Alejandro Juarez",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard": "^17.1.0",
