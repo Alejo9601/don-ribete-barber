@@ -41,6 +41,20 @@ export async function getAllAppointments() {
   )
 }
 
+export async function getOccupiedAppointmentSlots() {
+  const appDB = new AppointmentDB()
+  const result = await appDB.getOccupiedSlots()
+
+  return result.rows.map((appointment) => {
+    const row = appointment as unknown as AppointmentRecord
+
+    return {
+      date: row.date,
+      time: row.time
+    }
+  })
+}
+
 export async function setAppointment(appointmentData: AppointmentRecord) {
   const clientToSave = appointmentData.client
   const savedClientId = await createClient(clientToSave)

@@ -15,6 +15,13 @@ export class AppointmentDB {
       args: []
     })
   }
+
+  getOccupiedSlots() {
+    return client.execute({
+      sql: 'SELECT date, time FROM appointments ORDER BY date ASC, time ASC',
+      args: []
+    })
+  }
 }
 // export function createAppointment(ap: Appointment, clientId: number) {
 //   return client.execute({
