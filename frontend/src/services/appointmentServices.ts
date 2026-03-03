@@ -1,4 +1,5 @@
 import { Appointment } from '../types/Appointment'
+import { BookedSlot } from '../types/BookedSlot'
 import { getApiUrl } from '../utils/api'
 
 // function normalizeAppointment(appointmentData: any) {
@@ -42,6 +43,29 @@ export async function getAppointments() {
     })
     .catch((error) => {
       console.error('Error fetching appointments:', error)
+      throw error
+    })
+}
+
+export async function getOccupiedAppointmentSlots() {
+  const options: RequestInit = {
+    mode: 'cors',
+    method: 'GET',
+    headers: {
+      Accept: 'application/json'
+    }
+  }
+
+  return fetch(getApiUrl('/api/appointments/occupied'), options)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch occupied appointment slots')
+      }
+
+      return response.json() as Promise<BookedSlot[]>
+    })
+    .catch((error) => {
+      console.error('Error fetching occupied appointment slots:', error)
       throw error
     })
 }

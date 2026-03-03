@@ -1,9 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'wouter'
 import { useUser } from '../hooks/useUser'
-import AsideAdminPanel from '../components/AsideAdminPanel'
+import AsideAdminPanel, {
+  AdminSection
+} from '../components/AsideAdminPanel'
 import ListOfAppointments from '../components/ListOfAppointments'
 import { useAppointments } from '../hooks/useAppointments'
+import { useAvailability } from '../hooks/useAvailability'
+import { AvailabilityEditor } from '../components/AvailabilityEditor'
 
 const bypassAdminAuth = import.meta.env.VITE_BYPASS_ADMIN_AUTH === 'true'
 
@@ -11,6 +15,13 @@ const AdminPanel = () => {
   const [, navigate] = useLocation()
   const { user, isAuthResolved } = useUser()
   const { appointments, isLoading, error } = useAppointments()
+  const [activeSection, setActiveSection] =
+    useState<AdminSection>('appointments')
+  const {
+    availability,
+    isLoading: isAvailabilityLoading,
+    error: availabilityError
+  } = useAvailability()
   const todayAppointments = appointments.filter(
     (appointment) => appointment.date === new Date().toISOString().split('T')[0]
   ).length
@@ -25,13 +36,37 @@ const AdminPanel = () => {
     }
   }, [isAuthResolved, navigate, user])
 
+  function renderActiveSection() {
+    if (activeSection === 'availability') {
+      return (
+        <AvailabilityEditor
+          initialAvailability={availability}
+          isLoading={isAvailabilityLoading}
+          error={availabilityError}
+        />
+      )
+    }
+
+    return (
+      <ListOfAppointments
+        appointments={appointments}
+        isLoading={isLoading}
+        error={error}
+      />
+    )
+  }
+
   if (bypassAdminAuth) {
     return (
-      <section className="min-h-dvh bg-zinc-950 px-5 py-5 text-white sm:px-6 lg:px-8">
+      <section className="min-h-dvh bg-zinc-950 px-5 py-5 text-white sm:px-6 lg:h-dvh lg:overflow-hidden lg:px-8">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(8,145,178,0.14),transparent_30%),radial-gradient(circle_at_right,rgba(255,255,255,0.04),transparent_24%)]"></div>
-        <div className="relative mx-auto flex max-w-7xl flex-col gap-5 lg:flex-row">
-          <AsideAdminPanel totalAppointments={appointments.length} />
-          <main className="flex-1 space-y-5">
+        <div className="relative mx-auto flex max-w-7xl flex-col gap-5 lg:h-full lg:flex-row">
+          <AsideAdminPanel
+            totalAppointments={appointments.length}
+            activeSection={activeSection}
+            onSectionChange={setActiveSection}
+          />
+          <main className="flex-1 space-y-5 lg:flex lg:min-h-0 lg:flex-col">
             <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur">
               <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                 <div className="space-y-3">
@@ -69,12 +104,7 @@ const AdminPanel = () => {
                 </div>
               </div>
             </section>
-
-            <ListOfAppointments
-              appointments={appointments}
-              isLoading={isLoading}
-              error={error}
-            />
+            <div className="lg:min-h-0 lg:flex-1">{renderActiveSection()}</div>
           </main>
         </div>
       </section>
@@ -90,11 +120,15 @@ const AdminPanel = () => {
   }
 
   return user === undefined ? null : (
-    <section className="min-h-dvh bg-zinc-950 px-5 py-5 text-white sm:px-6 lg:px-8">
+    <section className="min-h-dvh bg-zinc-950 px-5 py-5 text-white sm:px-6 lg:h-dvh lg:overflow-hidden lg:px-8">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(8,145,178,0.14),transparent_30%),radial-gradient(circle_at_right,rgba(255,255,255,0.04),transparent_24%)]"></div>
-      <div className="relative mx-auto flex max-w-7xl flex-col gap-5 lg:flex-row">
-        <AsideAdminPanel totalAppointments={appointments.length} />
-        <main className="flex-1 space-y-5">
+      <div className="relative mx-auto flex max-w-7xl flex-col gap-5 lg:h-full lg:flex-row">
+        <AsideAdminPanel
+          totalAppointments={appointments.length}
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
+        />
+        <main className="flex-1 space-y-5 lg:flex lg:min-h-0 lg:flex-col">
           <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div className="space-y-3">
@@ -132,12 +166,7 @@ const AdminPanel = () => {
               </div>
             </div>
           </section>
-
-          <ListOfAppointments
-            appointments={appointments}
-            isLoading={isLoading}
-            error={error}
-          />
+          <div className="lg:min-h-0 lg:flex-1">{renderActiveSection()}</div>
         </main>
       </div>
     </section>

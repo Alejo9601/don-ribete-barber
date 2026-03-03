@@ -5,10 +5,10 @@ import { ChangeEvent, FormEvent, useContext, useState } from 'react'
 import { FormInput } from '../../FormInput'
 import { ModalClosingButton } from '../../ModalClosingButton'
 import { ReservationContext } from '../../../context/reservationContext'
-import { useAppointments } from '../../../hooks/useAppointments'
+import { useAvailability } from '../../../hooks/useAvailability'
+import { useBookedSlots } from '../../../hooks/useBookedSlots'
 
 const defaultDate = dayjs().hour(15).minute(0)
-const businessHours = [10, 11, 12, 15, 16, 17, 18, 19, 20]
 dayjs.locale('es')
 
 // const initialClientState: Client = {
@@ -39,9 +39,10 @@ export default function ReservationForm({
   // )
 
   const reservation = useContext(ReservationContext)
-  const { appointments } = useAppointments()
+  const { bookedSlots } = useBookedSlots()
+  const { availability } = useAvailability()
   const [selectedDate, setSelectedDate] = useState<Dayjs>(defaultDate)
-  const [selectedHour, setSelectedHour] = useState<number | null>(15)
+  const [selectedHour, setSelectedHour] = useState<string | null>('15:00')
 
   function shouldDisableDate(date: Dayjs) {
     if (date.day() === 0) {
@@ -109,12 +110,12 @@ export default function ReservationForm({
     })
   }
 
-  function onTimeSelect(hour: number) {
+  function onTimeSelect(hour: string) {
     setSelectedHour(hour)
     const { ...props } = reservation?.appointment
     reservation?.updateAppointment({
       ...props,
-      time: `${String(hour).padStart(2, '0')}:00`
+      time: hour
     })
   }
 
@@ -126,24 +127,36 @@ export default function ReservationForm({
   function getBookedHoursForDate(date: Dayjs) {
     const selectedDateValue = date.format('YYYY-MM-DD')
 
-    return appointments
+    return bookedSlots
       .filter((appointment) => appointment.date === selectedDateValue)
-      .map((appointment) => Number(appointment.time.split(':')[0]))
-      .filter((hour) => Number.isFinite(hour))
-      .sort((firstHour, secondHour) => firstHour - secondHour)
+      .map((appointment) => appointment.time)
+      .sort()
+  }
+
+  function getConfiguredHoursForDate(date: Dayjs) {
+    const dayAvailability = availability.find(
+      (day) => day.dayOfWeek === date.day()
+    )
+
+    if (!dayAvailability || !dayAvailability.enabled) {
+      return []
+    }
+
+    return dayAvailability.hours
   }
 
   function getAvailableHoursForDate(date: Dayjs) {
     const bookedHours = getBookedHoursForDate(date)
+    const configuredHours = getConfiguredHoursForDate(date)
     const isToday = date.isSame(dayjs(), 'day')
-    const currentHour = dayjs().hour()
+    const currentTime = dayjs()
 
-    return businessHours.filter((hour) => {
+    return configuredHours.filter((hour) => {
       if (bookedHours.includes(hour)) {
         return false
       }
 
-      if (isToday && hour <= currentHour) {
+      if (isToday && dayjs(`${date.format('YYYY-MM-DD')} ${hour}`).isBefore(currentTime)) {
         return false
       }
 
@@ -292,7 +305,7 @@ export default function ReservationForm({
                       }`}
                       onClick={() => onTimeSelect(hour)}
                     >
-                      {`${String(hour).padStart(2, '0')}:00`}
+                      {hour}
                     </button>
                   )
                 })

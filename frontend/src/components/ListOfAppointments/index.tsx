@@ -26,7 +26,7 @@ const ListOfAppointments = ({
 }) => {
   if (isLoading) {
     return (
-      <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur">
+      <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur lg:h-full">
         <p className="text-sm text-zinc-400">Loading appointments...</p>
       </section>
     )
@@ -34,7 +34,7 @@ const ListOfAppointments = ({
 
   if (error) {
     return (
-      <section className="rounded-[28px] border border-red-500/20 bg-red-500/10 p-6 text-sm text-red-100">
+      <section className="rounded-[28px] border border-red-500/20 bg-red-500/10 p-6 text-sm text-red-100 lg:h-full">
         {error}
       </section>
     )
@@ -42,7 +42,7 @@ const ListOfAppointments = ({
 
   if (appointments.length === 0) {
     return (
-      <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur">
+      <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur lg:h-full">
         <h3 className="text-lg font-semibold text-white">Appointments</h3>
         <p className="mt-3 text-sm text-zinc-400">
           There are no appointments scheduled yet.
@@ -52,7 +52,7 @@ const ListOfAppointments = ({
   }
 
   return (
-    <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur">
+    <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur lg:flex lg:h-full lg:min-h-0 lg:flex-col">
       <div className="mb-6 flex flex-col gap-2 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-white">Appointments</h3>
@@ -65,7 +65,7 @@ const ListOfAppointments = ({
         </span>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
         {appointments.map((appointment) => (
           <article
             key={`${appointment.id ?? 'appointment'}-${appointment.date}-${appointment.time}`}
