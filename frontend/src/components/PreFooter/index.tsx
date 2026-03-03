@@ -21,19 +21,26 @@ export function PreFooter() {
 
   return (
     <section className="relative my-20 overflow-hidden">
-      <div className="flex flex-col gap-5 py-28 items-center justify-center bg-orange-700 z-[2]">
-        <h2 className="text-white  text-center text-5xl lg:text-7xl font-extrabold z-[2]">
-          Reserva tu turno ahora
-        </h2>
-        <p className="text-slate-950 text-center text-2xl font-semibold z-[2]">
-          ¡ Tenemos los mejores precios !
-        </p>
-        <Button onClick={handleOnClick} additionalProps="text-xl z-[2]">
-          Reservar
-        </Button>
+      <div className="relative flex w-full overflow-hidden border-y border-white/10 bg-gradient-to-br from-slate-600 via-slate-700 to-zinc-800">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.16),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_30%)]"></div>
+        <div className="relative z-[2] flex w-full flex-col items-center justify-center gap-5 px-6 py-20 text-center sm:px-10 lg:px-16 lg:py-24">
+          <p className="text-sm uppercase tracking-[0.32em] text-slate-200">
+            Reserva online
+          </p>
+          <h2 className="max-w-3xl text-4xl font-semibold leading-tight text-white md:text-5xl lg:text-6xl">
+            Reserva tu turno ahora
+          </h2>
+          <p className="max-w-2xl text-base leading-7 text-slate-100/90 md:text-lg">
+            Agenda en pocos pasos y elige el horario que mejor te quede.
+          </p>
+          <Button onClick={handleOnClick} additionalProps="z-[2] mt-4 text-base">
+            Reservar
+          </Button>
+        </div>
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-[1] hidden w-full items-center overflow-hidden lg:flex">
+          <BackgroundDotsSVG />
+        </div>
       </div>
-      <BackgroundDotsSVG />
-      <div className="bg-slate-800 h-28 w-1/3 absolute right-0 top-0 rounded-bl-xl"></div>
 
       {showModal ? (
         <ReservationModal closeModal={closeReservationModal}></ReservationModal>
