@@ -20,9 +20,16 @@ export default function BookAppointment() {
   }
 
   return (
-    <div className="z-[1] w-full lg:w-1/2">
+    <div className="z-[1] w-full max-w-[28rem]">
       <HeadingText />
-      <Button onClick={handleOnClick}>Agendar cita</Button>
+      <div className="mt-8 flex items-center gap-4">
+        <Button additionalProps="mt-0" onClick={handleOnClick}>
+          Agendar cita
+        </Button>
+        <span className="text-sm uppercase tracking-[0.28em] text-stone-500">
+          Patagon Barber
+        </span>
+      </div>
 
       {showModal ? (
         <ReservationModal closeModal={closeReservationModal}></ReservationModal>

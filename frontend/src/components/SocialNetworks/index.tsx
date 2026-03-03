@@ -6,7 +6,7 @@ import WhatsApp from '../SVGIcons/WhatsApp'
 export default function SocialNetworks({ onHeader }: { onHeader: boolean }) {
   return (
     <ul
-      className={`${onHeader ? 'hidden lg:flex' : 'flex'} h-7 gap-5 w-fit px-14`}
+      className={`${onHeader ? 'hidden lg:flex' : 'flex'} h-7 w-fit gap-4 text-stone-400`}
     >
       <ClickableListItem>
         <a href="" target="_blank">

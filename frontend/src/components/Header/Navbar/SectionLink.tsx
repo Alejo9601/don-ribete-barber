@@ -8,7 +8,7 @@ const SectionLink = ({
   refTo?: string
 }) => {
   return (
-    <li className="text-white text-2xl lg:text-lg p-5 cursor-pointer hover:text-cyan-600 transition">
+    <li className="cursor-pointer p-5 text-xl text-stone-200 transition hover:text-white lg:p-0 lg:text-sm lg:uppercase lg:tracking-[0.18em]">
       <Link href={refTo}>{children}</Link>
     </li>
   )

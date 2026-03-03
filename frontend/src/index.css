@@ -7,6 +7,13 @@
   outline: none;
 }
 
+body {
+  margin: 0;
+  background-color: rgb(12 10 9);
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+
 .noscroll {
   position: fixed;
   overflow-y: scroll;

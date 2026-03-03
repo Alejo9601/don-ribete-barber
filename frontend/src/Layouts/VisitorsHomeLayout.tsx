@@ -9,8 +9,8 @@ export default function VisitorsHomeLayout({
   children: ReactNode
 }) {
   return (
-    <div className="bg-black">
-      <section className="h-screen flex flex-col">
+    <div className="min-h-screen bg-stone-950 text-white">
+      <section className="flex min-h-[85vh] flex-col border-b border-white/10">
         <Header />
         <Banner />
       </section>

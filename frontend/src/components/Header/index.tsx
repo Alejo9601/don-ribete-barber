@@ -4,7 +4,7 @@ import SocialNetworks from '../SocialNetworks'
 
 export default function Header() {
   return (
-    <header className="flex justify-between w-full items-center relative">
+    <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
       <Logo></Logo>
       <Navbar></Navbar>
       <SocialNetworks onHeader={true}></SocialNetworks>

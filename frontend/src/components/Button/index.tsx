@@ -12,7 +12,7 @@ const Button = ({
   return (
     <button
       onClick={onClick}
-      className={`py-2 px-5 mt-8 bg-cyan-600 text-white ${additionalProps} font-bold rounded-md`}
+      className={`rounded-full border border-white/15 bg-white px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-stone-950 transition hover:bg-stone-200 ${additionalProps}`}
     >
       {children}
     </button>
