@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import VisitorsGeneralLayout from '../Layouts/VisitorsGeneralLayout'
 import { WithMarginWrapper } from '../components/WithMarginWrapper'
 import haircutImage from '../assets/images/haircut.webp'
@@ -5,102 +6,128 @@ import beardImage from '../assets/images/beard.webp'
 import eyebrowImage from '../assets/images/eyebrow.webp'
 import coverImage from '../assets/images/cover.webp'
 
-const featuredCuts = [
+const galleryItems = [
   {
-    title: 'Fade prolijo',
-    description: 'Laterales limpios, textura arriba y un acabado sobrio.',
+    title: 'Fade',
+    subtitle: 'Laterales limpios y transicion marcada',
     image: haircutImage,
-    imageClassName: 'md:col-span-2 md:row-span-2'
+    mediaHeightClassName: 'h-[28rem] md:h-[34rem]',
+    imageClassName: 'object-center'
   },
   {
-    title: 'Barba perfilada',
-    description: 'Definicion corta y contornos precisos para cerrar el look.',
-    image: beardImage,
-    imageClassName: 'md:col-span-1 md:row-span-1'
-  },
-  {
-    title: 'Detalle final',
-    description: 'Cejas y terminacion para que el corte quede completo.',
-    image: eyebrowImage,
-    imageClassName: 'md:col-span-1 md:row-span-1'
-  },
-  {
-    title: 'Ambiente',
-    description: 'Una estetica de barrio, oscura y directa.',
+    title: 'Textura',
+    subtitle: 'Trabajo arriba con peso y forma',
     image: coverImage,
-    imageClassName: 'md:col-span-2 md:row-span-1'
+    mediaHeightClassName: 'h-[16rem] md:h-[18rem]',
+    imageClassName: 'object-center'
+  },
+  {
+    title: 'Barba',
+    subtitle: 'Perfilado corto y definicion precisa',
+    image: beardImage,
+    mediaHeightClassName: 'h-[22rem] md:h-[26rem]',
+    imageClassName: 'object-center'
+  },
+  {
+    title: 'Detalle',
+    subtitle: 'Terminacion fina para cerrar el corte',
+    image: eyebrowImage,
+    mediaHeightClassName: 'h-[15rem] md:h-[17rem]',
+    imageClassName: 'object-center'
+  },
+  {
+    title: 'Perfil',
+    subtitle: 'Volumen controlado y contorno prolijo',
+    image: haircutImage,
+    mediaHeightClassName: 'h-[18rem] md:h-[20rem]',
+    imageClassName: 'object-top'
+  },
+  {
+    title: 'Acabado',
+    subtitle: 'Un resultado limpio, sobrio y definido',
+    image: beardImage,
+    mediaHeightClassName: 'h-[26rem] md:h-[31rem]',
+    imageClassName: 'object-center'
   }
 ]
 
 export function Gallery() {
+  const [previewItem, setPreviewItem] = useState<(typeof galleryItems)[number] | null>(
+    null
+  )
+
+  useEffect(() => {
+    if (previewItem === null) {
+      return
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setPreviewItem(null)
+      }
+    }
+
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', handleEscape)
+
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', handleEscape)
+    }
+  }, [previewItem])
+
   return (
     <VisitorsGeneralLayout>
-      <main className="bg-black py-16 text-white md:py-24">
-        <WithMarginWrapper customClasses="space-y-12">
-          <section className="grid gap-8 rounded-[2rem] border border-white/10 bg-zinc-950/80 p-6 shadow-[0_30px_80px_rgba(0,0,0,0.35)] md:grid-cols-[minmax(0,1.05fr)_minmax(20rem,0.95fr)] md:p-10">
-            <div className="flex flex-col justify-center">
-              <p className="text-xs uppercase tracking-[0.4em] text-zinc-500">
-                Galeria
-              </p>
-              <h1 className="mt-4 max-w-xl text-4xl font-semibold leading-tight md:text-6xl">
-                Cortes reales, sin maqueta.
-              </h1>
-              <p className="mt-6 max-w-lg text-base leading-7 text-zinc-300 md:text-lg">
-                Una seleccion corta de estilos y terminaciones para mostrar el
-                tipo de trabajo que sale del local: limpio, contrastado y bien
-                definido.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3 text-sm uppercase tracking-[0.18em] text-zinc-400">
-                <span className="rounded-full border border-white/10 px-4 py-2">
-                  Fade
-                </span>
-                <span className="rounded-full border border-white/10 px-4 py-2">
-                  Barba
-                </span>
-                <span className="rounded-full border border-white/10 px-4 py-2">
-                  Perfilado
-                </span>
-              </div>
-            </div>
-            <div className="relative min-h-[22rem] overflow-hidden rounded-[1.75rem] border border-white/10">
-              <img
-                src={coverImage}
-                alt="Interior de la barberia"
-                className="h-full w-full object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                <p className="text-xs uppercase tracking-[0.35em] text-zinc-400">
-                  Patagon Barber
+      <main className="bg-stone-100 py-10 text-zinc-900 md:py-14">
+        <WithMarginWrapper customClasses="space-y-8">
+          <section className="border-b border-zinc-300 pb-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div className="max-w-2xl">
+                <p className="text-xs uppercase tracking-[0.38em] text-zinc-500">
+                  Nuestro trabajo
                 </p>
-                <p className="mt-3 max-w-sm text-sm leading-6 text-zinc-200">
-                  El mismo tono del local llevado a la galeria: oscuro, simple y
-                  sin ruido visual.
-                </p>
+                <h1 className="mt-3 text-3xl font-semibold uppercase tracking-[0.05em] md:text-5xl">
+                  Galeria de ribetes
+                </h1>
               </div>
+              <p className="max-w-md text-sm leading-6 text-zinc-600 md:text-right">
+                Una seleccion visual enfocada en mostrar nuestros mejores
+                cortes.
+              </p>
             </div>
           </section>
 
-          <section className="grid gap-4 md:auto-rows-[15rem] md:grid-cols-3">
-            {featuredCuts.map((item) => {
+          <section className="columns-1 gap-4 md:columns-2 xl:columns-3">
+            {galleryItems.map((item) => {
               return (
                 <article
-                  key={item.title}
-                  className={`group relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-zinc-950 ${item.imageClassName}`}
+                  key={`${item.title}-${item.subtitle}`}
+                  className="group mb-4 break-inside-avoid overflow-hidden bg-white p-3 shadow-[0_10px_35px_rgba(15,23,42,0.08)] transition-shadow duration-500 hover:shadow-[0_18px_45px_rgba(15,23,42,0.16)]"
                 >
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="h-full w-full object-cover object-center transition duration-700 group-hover:scale-[1.03]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
-                  <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
-                    <h2 className="text-2xl font-semibold text-white">
-                      {item.title}
-                    </h2>
-                    <p className="mt-2 max-w-md text-sm leading-6 text-zinc-200">
-                      {item.description}
-                    </p>
+                  <div className="flex flex-col">
+                    <div
+                      className={`overflow-hidden bg-zinc-200 ${item.mediaHeightClassName}`}
+                    >
+                      <button
+                        type="button"
+                        className="block h-full w-full cursor-pointer"
+                        onClick={() => setPreviewItem(item)}
+                      >
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className={`h-full w-full object-cover saturate-[0.85] transition duration-700 ease-out group-hover:scale-[1.06] group-hover:-translate-y-1 group-hover:saturate-100 group-hover:contrast-105 ${item.imageClassName}`}
+                        />
+                      </button>
+                    </div>
+                    <div className="border-t border-zinc-200 px-1 pb-1 pt-3">
+                      <p className="text-xs uppercase tracking-[0.32em] text-zinc-500">
+                        {item.title}
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-zinc-700">
+                        {item.subtitle}
+                      </p>
+                    </div>
                   </div>
                 </article>
               )
@@ -108,6 +135,40 @@ export function Gallery() {
           </section>
         </WithMarginWrapper>
       </main>
+      {previewItem ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4 py-8"
+          onClick={() => setPreviewItem(null)}
+        >
+          <div
+            className="relative w-full max-w-5xl overflow-hidden bg-white p-3 shadow-[0_24px_80px_rgba(0,0,0,0.45)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="absolute right-4 top-4 z-10 rounded-full bg-black/70 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-black"
+              onClick={() => setPreviewItem(null)}
+            >
+              Cerrar
+            </button>
+            <div className="max-h-[78vh] overflow-hidden bg-zinc-200">
+              <img
+                src={previewItem.image}
+                alt={previewItem.title}
+                className="max-h-[78vh] w-full object-contain"
+              />
+            </div>
+            <div className="border-t border-zinc-200 px-2 pb-1 pt-4">
+              <p className="text-xs uppercase tracking-[0.32em] text-zinc-500">
+                {previewItem.title}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-zinc-700">
+                {previewItem.subtitle}
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </VisitorsGeneralLayout>
   )
 }
