@@ -15,7 +15,7 @@ function isOddIndex(index: number) {
 const BusinessServices = () => {
   return (
     <WithMarginWrapper>
-      <div className="mx-auto mt-14 flex w-full max-w-6xl flex-col gap-8 px-6 lg:px-10">
+      <div className="mx-auto mt-14 flex w-full max-w-7xl flex-col gap-8 px-6 lg:px-10">
         {services.map((service, index) => {
           return (
             <ServiceContainer reversed={isOddIndex(index)} key={index}>

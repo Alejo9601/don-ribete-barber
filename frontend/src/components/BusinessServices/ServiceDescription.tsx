@@ -19,12 +19,12 @@ const ServiceDescription = ({
         />
       </div>
       <div
-        className={`flex h-fit w-full min-w-0 flex-col justify-center py-2 text-white lg:flex-1 lg:py-0 ${reversed ? 'items-start lg:pr-10' : 'items-start lg:pl-10'} `}
+        className={`flex h-full w-full min-w-0 flex-col justify-center px-2 py-4 text-white lg:flex-1 lg:px-6 lg:py-0 ${reversed ? 'items-start lg:pr-14' : 'items-start lg:pl-14'} `}
       >
-        <h1 className="w-full text-start text-3xl font-semibold md:text-4xl">
+        <h1 className="w-full max-w-xl text-start text-3xl font-semibold md:text-4xl">
           {descHeading}
         </h1>
-        <p className="w-full pt-4 text-base leading-7 text-stone-400 md:text-lg">
+        <p className="w-full max-w-xl pt-4 text-base leading-7 text-stone-400 md:text-lg">
           {descParagraph}
         </p>
       </div>

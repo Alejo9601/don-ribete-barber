@@ -15,7 +15,7 @@ const Navbar = () => {
         <BurgerButtonSVG></BurgerButtonSVG>
       </button>
       <ul
-        className={`${!showNav ? 'hidden' : 'flex'} absolute right-0 top-0 z-[4] h-screen w-dvw flex-col items-center justify-center bg-stone-950/95 lg:relative lg:flex lg:h-fit lg:w-fit lg:flex-row lg:gap-2 lg:bg-transparent`}
+        className={`${!showNav ? 'hidden' : 'flex'} absolute right-0 top-0 z-[4] h-screen w-dvw flex-col items-center justify-center bg-stone-950/95 lg:relative lg:flex lg:h-fit lg:w-fit lg:flex-row lg:gap-10 lg:bg-transparent`}
       >
         <SectionLink>Acerca de</SectionLink>
         <SectionLink>Galeria de Cortes</SectionLink>

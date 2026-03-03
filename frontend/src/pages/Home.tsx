@@ -46,7 +46,7 @@ const Home = () => {
   return (
     <VisitorsHomeLayout>
       <main className="bg-stone-950 py-20">
-        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 lg:px-10">
           <p className="text-sm uppercase tracking-[0.3em] text-stone-500">
             Servicios
           </p>
