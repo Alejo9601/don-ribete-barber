@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'wouter'
 import { useUser } from '../hooks/useUser'
 import AsideAdminPanel, {
@@ -13,10 +13,11 @@ const bypassAdminAuth = import.meta.env.VITE_BYPASS_ADMIN_AUTH === 'true'
 
 const AdminPanel = () => {
   const [, navigate] = useLocation()
-  const { user, isAuthResolved } = useUser()
+  const { user, isAuthResolved, refreshSession } = useUser()
   const { appointments, isLoading, error } = useAppointments()
   const [activeSection, setActiveSection] =
     useState<AdminSection>('appointments')
+  const hasRetriedSession = useRef(false)
   const {
     availability,
     isLoading: isAvailabilityLoading,
@@ -31,10 +32,23 @@ const AdminPanel = () => {
       return
     }
 
-    if (isAuthResolved && user === undefined) {
-      navigate('/admin-panel/login', { replace: true })
+    if (!isAuthResolved || user !== undefined) {
+      return
     }
-  }, [isAuthResolved, navigate, user])
+
+    if (hasRetriedSession.current) {
+      navigate('/admin-panel/login', { replace: true })
+      return
+    }
+
+    hasRetriedSession.current = true
+
+    refreshSession().then((currentUser) => {
+      if (currentUser === null) {
+        navigate('/admin-panel/login', { replace: true })
+      }
+    })
+  }, [isAuthResolved, navigate, refreshSession, user])
 
   function renderActiveSection() {
     if (activeSection === 'availability') {

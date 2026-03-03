@@ -8,7 +8,7 @@ export function useUser() {
     throw new Error('useUser must be used within a UserContextProvider')
   }
 
-  const { user, isAuthResolved, login, logout } = userContext
+  const { user, isAuthResolved, login, logout, refreshSession } = userContext
 
-  return { user, isAuthResolved, login, logout }
+  return { user, isAuthResolved, login, logout, refreshSession }
 }

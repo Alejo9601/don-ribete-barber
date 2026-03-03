@@ -7,13 +7,15 @@ interface UserContextType {
   isAuthResolved: boolean
   login: (user: User) => Promise<void>
   logout: () => Promise<void>
+  refreshSession: () => Promise<User | null>
 }
 
 const initialUserContext: UserContextType = {
   user: undefined,
   isAuthResolved: false,
   login: async () => {},
-  logout: async () => {}
+  logout: async () => {},
+  refreshSession: async () => null
 }
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -25,16 +27,21 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
   const [isAuthResolved, setIsAuthResolved] = useState(false)
   const hasManualAuthChange = useRef(false)
 
+  async function refreshSession() {
+    const currentUser = await getCurrentUser()
+    setUser(currentUser ?? undefined)
+    setIsAuthResolved(true)
+    return currentUser
+  }
+
   useEffect(() => {
     let isCancelled = false
 
-    getCurrentUser()
-      .then((currentUser) => {
+    refreshSession()
+      .then(() => {
         if (isCancelled || hasManualAuthChange.current) {
           return
         }
-
-        setUser(currentUser ?? undefined)
       })
       .catch((error) => {
         if (isCancelled || hasManualAuthChange.current) {
@@ -43,12 +50,6 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
 
         console.error(error)
         setUser(undefined)
-      })
-      .finally(() => {
-        if (isCancelled || hasManualAuthChange.current) {
-          return
-        }
-
         setIsAuthResolved(true)
       })
 
@@ -73,7 +74,9 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <UserContext.Provider value={{ user, isAuthResolved, login, logout }}>
+    <UserContext.Provider
+      value={{ user, isAuthResolved, login, logout, refreshSession }}
+    >
       {children}
     </UserContext.Provider>
   )

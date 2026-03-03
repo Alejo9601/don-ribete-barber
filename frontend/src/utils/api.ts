@@ -1,7 +1,5 @@
-const DEFAULT_API_URL = 'http://localhost:3000'
-
 export function getApiUrl(path: string) {
-  const baseUrl = import.meta.env.VITE_API_URL ?? DEFAULT_API_URL
+  const baseUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 
   return `${baseUrl}${path}`
 }
