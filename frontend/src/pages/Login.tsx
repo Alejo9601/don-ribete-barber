@@ -11,13 +11,19 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [, navigate] = useLocation()
-  const { login } = useUser()
+  const { login, user } = useUser()
 
   useEffect(() => {
     if (bypassAdminAuth) {
       navigate('/admin-panel/home', { replace: true })
     }
   }, [navigate])
+
+  useEffect(() => {
+    if (user !== undefined) {
+      navigate('/admin-panel/home', { replace: true })
+    }
+  }, [navigate, user])
 
   async function handleLogin(ev: FormEvent) {
     ev.preventDefault()
@@ -27,7 +33,6 @@ const Login = () => {
         setIsSubmitting(true)
         const user = await loginUser(username, password)
         await login(user)
-        navigate('/admin-panel/home', { replace: true })
       } catch (_error) {
         setErrorMessage('Invalid credentials')
       } finally {

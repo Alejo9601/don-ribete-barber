@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useEffect, useState } from 'react'
+import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
 import { User } from '../types/User'
 import { getCurrentUser, logoutUser } from '../services/userServices'
 
@@ -23,22 +23,42 @@ export const UserContext = createContext<UserContextType | undefined>(
 export function UserContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User>()
   const [isAuthResolved, setIsAuthResolved] = useState(false)
+  const hasManualAuthChange = useRef(false)
 
   useEffect(() => {
+    let isCancelled = false
+
     getCurrentUser()
       .then((currentUser) => {
+        if (isCancelled || hasManualAuthChange.current) {
+          return
+        }
+
         setUser(currentUser ?? undefined)
       })
       .catch((error) => {
+        if (isCancelled || hasManualAuthChange.current) {
+          return
+        }
+
         console.error(error)
         setUser(undefined)
       })
       .finally(() => {
+        if (isCancelled || hasManualAuthChange.current) {
+          return
+        }
+
         setIsAuthResolved(true)
       })
+
+    return () => {
+      isCancelled = true
+    }
   }, [])
 
   function login(user: User) {
+    hasManualAuthChange.current = true
     setUser(user)
     setIsAuthResolved(true)
 
@@ -47,6 +67,7 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
 
   async function logout() {
     await logoutUser()
+    hasManualAuthChange.current = true
     setUser(undefined)
     setIsAuthResolved(true)
   }
