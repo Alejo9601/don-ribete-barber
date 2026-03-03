@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="App">
       <UserContextProvider>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
           <Switch>
             <Route path="/">
               <Home></Home>
