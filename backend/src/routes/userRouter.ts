@@ -1,7 +1,11 @@
 import express from 'express'
 import { authenticateUser, toPublicUser } from '../services/userServices'
 import { requireAuth, AuthenticatedRequest } from '../middleware/requireAuth'
-import { clearAuthCookie, serializeAuthCookie } from '../utils/cookies'
+import {
+  AUTH_COOKIE_NAME,
+  getAuthCookieOptions,
+  getClearAuthCookieOptions
+} from '../utils/cookies'
 import { signAuthToken } from '../utils/jwt'
 
 const userRouter = express.Router()
@@ -29,7 +33,7 @@ userRouter.post('/login', async (req, res, next) => {
       rol: user.rol
     })
 
-    res.setHeader('Set-Cookie', serializeAuthCookie(token, maxAgeSeconds))
+    res.cookie(AUTH_COOKIE_NAME, token, getAuthCookieOptions(maxAgeSeconds))
     res.status(200).json(user)
   } catch (error) {
     next(error)
@@ -45,7 +49,7 @@ userRouter.get('/session', requireAuth, (req: AuthenticatedRequest, res) => {
 })
 
 userRouter.post('/logout', (_req, res) => {
-  res.setHeader('Set-Cookie', clearAuthCookie())
+  res.clearCookie(AUTH_COOKIE_NAME, getClearAuthCookieOptions())
   res.status(204).send()
 })
 
