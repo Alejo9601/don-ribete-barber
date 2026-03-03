@@ -15,18 +15,20 @@ function isOddIndex(index: number) {
 const BusinessServices = () => {
   return (
     <WithMarginWrapper>
-      {services.map((service, index) => {
-        return (
-          <ServiceContainer reversed={isOddIndex(index)} key={index}>
-            <ServiceDescription
-              descHeading={service.descHeading}
-              descParagraph={service.descParagraph}
-              reversed={isOddIndex(index)}
-              descImage={descImages[index]}
-            ></ServiceDescription>
-          </ServiceContainer>
-        )
-      })}
+      <div className="mx-auto mt-14 flex w-full max-w-6xl flex-col gap-8 px-6 lg:px-10">
+        {services.map((service, index) => {
+          return (
+            <ServiceContainer reversed={isOddIndex(index)} key={index}>
+              <ServiceDescription
+                descHeading={service.descHeading}
+                descParagraph={service.descParagraph}
+                reversed={isOddIndex(index)}
+                descImage={descImages[index]}
+              ></ServiceDescription>
+            </ServiceContainer>
+          )
+        })}
+      </div>
     </WithMarginWrapper>
   )
 }

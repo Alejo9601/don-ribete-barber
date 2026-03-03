@@ -11,19 +11,20 @@ const ServiceDescription = ({
 }) => {
   return (
     <>
-      <div className="flex w-full lg:w-1/2 h-auto justify-center">
+      <div className="flex h-[16rem] w-full shrink-0 overflow-hidden rounded-[1.5rem] lg:h-full lg:w-[24rem]">
         <img
-          className="object-cover object-center w-full h-full rounded-xl"
+          className="h-full w-full object-cover object-center"
           src={descImage}
+          alt={descHeading}
         />
       </div>
       <div
-        className={`flex flex-col w-full lg:w-1/2 h-fit lg:h-full py-8 lg:py-0 text-white justify-center ${reversed ? 'items-end lg:pr-14' : 'items-start lg:pl-14'} `}
+        className={`flex h-fit w-full min-w-0 flex-col justify-center py-2 text-white lg:flex-1 lg:py-0 ${reversed ? 'items-start lg:pr-10' : 'items-start lg:pl-10'} `}
       >
-        <h1 className="w-full text-center lg:text-start text-5xl font-bold">
+        <h1 className="w-full text-start text-3xl font-semibold md:text-4xl">
           {descHeading}
         </h1>
-        <p className="w-full text-center lg:text-start pt-5 text-xl text-slate-300">
+        <p className="w-full pt-4 text-base leading-7 text-stone-400 md:text-lg">
           {descParagraph}
         </p>
       </div>
