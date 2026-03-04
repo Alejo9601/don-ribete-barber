@@ -13,7 +13,7 @@ export function useBookedSlots() {
         setError('')
       })
       .catch(() => {
-        setError('Could not load occupied slots.')
+        setError('No se pudieron cargar los horarios ocupados.')
       })
   }, [])
 

@@ -13,10 +13,10 @@ const statusStyles: Record<string, string> = {
 }
 
 const statusLabels: Record<string, string> = {
-  PENDING: 'Pending',
-  CONFIRMED: 'Confirmed',
-  COMPLETED: 'Completed',
-  CANCELLED: 'Cancelled'
+  PENDING: 'Pendiente',
+  CONFIRMED: 'Confirmado',
+  COMPLETED: 'Completado',
+  CANCELLED: 'Cancelado'
 }
 
 function getActionButtonClassName(variant: 'primary' | 'secondary' | 'danger') {
@@ -43,7 +43,7 @@ function getClientDisplayName(appointment: Appointment) {
   const firstName = appointment.client?.name ?? ''
   const lastName = appointment.client?.lastname ?? ''
 
-  return `${firstName} ${lastName}`.trim() || 'No client name'
+  return `${firstName} ${lastName}`.trim() || 'Sin nombre'
 }
 
 const ListOfAppointments = ({
@@ -76,7 +76,7 @@ const ListOfAppointments = ({
         )
       )
     } catch {
-      setActionError('Could not update appointment status.')
+      setActionError('No se pudo actualizar el estado del turno.')
     } finally {
       setPendingActionId(null)
     }
@@ -95,7 +95,7 @@ const ListOfAppointments = ({
         currentAppointments.filter((appointment) => appointment.id !== id)
       )
     } catch {
-      setActionError('Could not delete appointment.')
+      setActionError('No se pudo eliminar el turno.')
     } finally {
       setPendingActionId(null)
     }
@@ -104,7 +104,7 @@ const ListOfAppointments = ({
   if (isLoading) {
     return (
       <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur lg:h-full">
-        <p className="text-sm text-zinc-400">Loading appointments...</p>
+        <p className="text-sm text-zinc-400">Cargando turnos...</p>
       </section>
     )
   }
@@ -120,9 +120,9 @@ const ListOfAppointments = ({
   if (appointments.length === 0) {
     return (
       <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur lg:h-full">
-        <h3 className="text-lg font-semibold text-white">Appointments</h3>
+        <h3 className="text-lg font-semibold text-white">Turnos</h3>
         <p className="mt-3 text-sm text-zinc-400">
-          There are no appointments scheduled yet.
+          Aún no hay turnos agendados.
         </p>
       </section>
     )
@@ -132,13 +132,13 @@ const ListOfAppointments = ({
     <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur lg:flex lg:h-full lg:min-h-0 lg:flex-col">
       <div className="mb-6 flex flex-col gap-2 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-white">Appointments</h3>
+          <h3 className="text-lg font-semibold text-white">Turnos</h3>
           <p className="text-sm text-zinc-400">
-            Upcoming bookings and client details.
+            Reservas próximas y datos del cliente.
           </p>
         </div>
         <span className="inline-flex w-fit rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.28em] text-zinc-500">
-          {appointments.length} scheduled
+          {appointments.length} agendados
         </span>
       </div>
 
@@ -180,8 +180,8 @@ const ListOfAppointments = ({
                 <div className="flex min-w-max items-center gap-2 lg:justify-end">
                   <button
                     type="button"
-                    title="Confirm"
-                    aria-label="Confirm appointment"
+                    title="Confirmar"
+                    aria-label="Confirmar turno"
                     disabled={
                       pendingActionId === appointment.id ||
                       appointment.status === 'CONFIRMED'
@@ -195,8 +195,8 @@ const ListOfAppointments = ({
                   </button>
                   <button
                     type="button"
-                    title="Complete"
-                    aria-label="Mark appointment as completed"
+                    title="Completar"
+                    aria-label="Marcar turno como completado"
                     disabled={
                       pendingActionId === appointment.id ||
                       appointment.status === 'COMPLETED'
@@ -210,8 +210,8 @@ const ListOfAppointments = ({
                   </button>
                   <button
                     type="button"
-                    title="Cancel"
-                    aria-label="Cancel appointment"
+                    title="Cancelar"
+                    aria-label="Cancelar turno"
                     disabled={
                       pendingActionId === appointment.id ||
                       appointment.status === 'CANCELLED'
@@ -225,8 +225,8 @@ const ListOfAppointments = ({
                   </button>
                   <button
                     type="button"
-                    title="Delete"
-                    aria-label="Delete appointment"
+                    title="Eliminar"
+                    aria-label="Eliminar turno"
                     disabled={pendingActionId === appointment.id}
                     onClick={() => handleDelete(appointment.id)}
                     className={getActionButtonClassName('danger')}

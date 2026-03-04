@@ -14,7 +14,7 @@ export function useAvailability() {
         setError('')
       })
       .catch(() => {
-        setError('Could not load availability.')
+        setError('No se pudo cargar la disponibilidad.')
       })
       .finally(() => {
         setIsLoading(false)

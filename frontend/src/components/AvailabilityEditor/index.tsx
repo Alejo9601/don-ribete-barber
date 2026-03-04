@@ -78,9 +78,9 @@ export function AvailabilityEditor({
     <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur lg:flex lg:h-full lg:min-h-0 lg:flex-col">
       <div className="mb-6 flex flex-col gap-3 border-b border-white/10 pb-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-white">Availability</h3>
+          <h3 className="text-lg font-semibold text-white">Disponibilidad</h3>
           <p className="text-sm text-zinc-400">
-            Define qué dias y horarios se pueden reservar desde la web.
+            Define qué días y horarios se pueden reservar desde la web.
           </p>
         </div>
         <button
@@ -89,7 +89,7 @@ export function AvailabilityEditor({
           disabled={isSaving || isLoading}
           className="h-11 w-full rounded-2xl bg-cyan-600 px-5 text-sm font-semibold text-white transition hover:bg-cyan-500 disabled:cursor-not-allowed disabled:bg-cyan-800/60 sm:w-auto"
         >
-          {isSaving ? 'Saving...' : 'Save availability'}
+          {isSaving ? 'Guardando...' : 'Guardar disponibilidad'}
         </button>
       </div>
 

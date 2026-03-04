@@ -16,7 +16,7 @@ export function useAppointments() {
         setError('')
       })
       .catch(() => {
-        setError('Could not load appointments.')
+        setError('No se pudieron cargar los turnos.')
       })
       .finally(() => {
         setIsLoading(false)

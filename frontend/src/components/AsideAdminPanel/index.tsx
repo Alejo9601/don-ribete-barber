@@ -4,8 +4,8 @@ import { useUser } from '../../hooks/useUser'
 export type AdminSection = 'appointments' | 'availability'
 
 const navigationItems: Array<{ id: AdminSection; label: string }> = [
-  { id: 'appointments', label: 'Appointments' },
-  { id: 'availability', label: 'Availability' }
+  { id: 'appointments', label: 'Turnos' },
+  { id: 'availability', label: 'Disponibilidad' }
 ]
 
 const AsideAdminPanel = ({
@@ -32,16 +32,16 @@ const AsideAdminPanel = ({
           Patagon Barber
         </span>
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold text-white">Admin dashboard</h2>
+          <h2 className="text-lg font-semibold text-white">Panel de admin</h2>
           <p className="text-sm leading-6 text-zinc-400">
-            Manage appointments from a single minimalist view.
+            Gestiona turnos desde una sola vista.
           </p>
         </div>
       </div>
 
       <div className="mt-5 rounded-3xl border border-cyan-500/20 bg-cyan-500/10 p-4">
         <p className="text-xs uppercase tracking-[0.28em] text-cyan-200/70">
-          Total appointments
+          Turnos totales
         </p>
         <p className="mt-3 text-4xl font-semibold text-white">
           {totalAppointments}
@@ -70,7 +70,7 @@ const AsideAdminPanel = ({
           onClick={handleLogout}
           className="w-full rounded-2xl border border-white/10 px-4 py-3 text-left text-sm font-medium text-zinc-300 transition hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-100"
         >
-          Logout
+          Cerrar sesion
         </button>
       </div>
     </aside>

@@ -34,12 +34,12 @@ const Login = () => {
         const user = await loginUser(username, password)
         await login(user)
       } catch (_error) {
-        setErrorMessage('Invalid credentials')
+        setErrorMessage('Credenciales inválidas')
       } finally {
         setIsSubmitting(false)
       }
     } else {
-      alert('Please complete both "username" and "password" fields')
+      alert('Completa los campos de usuario y contraseña')
     }
   }
 
@@ -62,9 +62,9 @@ const Login = () => {
             Patagon Barber
           </span>
           <div className="space-y-2">
-            <h1 className="text-3xl font-semibold text-white">Admin Login</h1>
+            <h1 className="text-3xl font-semibold text-white">Ingreso admin</h1>
             <p className="text-sm leading-6 text-zinc-400">
-              Access appointments and manage the admin panel.
+              Accede a los turnos y gestiona el panel de administración.
             </p>
           </div>
         </div>
@@ -76,24 +76,24 @@ const Login = () => {
             </p>
           ) : null}
           <label className="flex flex-col gap-2" htmlFor="username">
-            <span className="text-sm font-medium text-zinc-300">Username</span>
+            <span className="text-sm font-medium text-zinc-300">Usuario</span>
             <input
               onChange={handleUsernameInput}
               className="h-12 rounded-2xl border border-white/10 bg-black/20 px-4 text-sm text-white placeholder:text-zinc-500 transition focus:border-cyan-500/70"
               type="text"
               name="username"
-              placeholder="Enter your username"
+              placeholder="Ingresa tu usuario"
               autoComplete="username"
             />
           </label>
           <label className="flex flex-col gap-2" htmlFor="password">
-            <span className="text-sm font-medium text-zinc-300">Password</span>
+            <span className="text-sm font-medium text-zinc-300">Contraseña</span>
             <input
               onChange={handlePasswordInput}
               className="h-12 rounded-2xl border border-white/10 bg-black/20 px-4 text-sm text-white placeholder:text-zinc-500 transition focus:border-cyan-500/70"
               type="password"
               name="password"
-              placeholder="Enter your password"
+              placeholder="Ingresa tu contraseña"
               autoComplete="current-password"
             />
           </label>
@@ -102,7 +102,7 @@ const Login = () => {
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Signing in...' : 'Login'}
+            {isSubmitting ? 'Ingresando...' : 'Ingresar'}
           </button>
         </form>
       </div>

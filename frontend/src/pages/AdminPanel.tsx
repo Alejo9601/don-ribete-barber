@@ -91,15 +91,15 @@ const AdminPanel = () => {
               <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                 <div className="space-y-3">
                   <span className="inline-flex rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-zinc-500">
-                    Overview
+                    Resumen
                   </span>
                   <div className="space-y-2">
                     <h1 className="text-3xl font-semibold text-white">
-                      Minimal admin dashboard
+                      Panel de administracion
                     </h1>
                     <p className="max-w-2xl text-sm leading-6 text-zinc-400">
-                      Keep track of daily bookings and client requests with a
-                      quieter interface.
+                      Controla turnos diarios y solicitudes de clientes desde
+                      una interfaz clara.
                     </p>
                   </div>
                 </div>
@@ -107,7 +107,7 @@ const AdminPanel = () => {
                 <div className="grid grid-cols-1 gap-3 sm:min-w-[280px] sm:grid-cols-2">
                   <div className="rounded-3xl border border-white/10 bg-black/10 p-4">
                     <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
-                      Today
+                      Hoy
                     </p>
                     <p className="mt-3 text-3xl font-semibold text-white">
                       {todayAppointments}
@@ -115,10 +115,14 @@ const AdminPanel = () => {
                   </div>
                   <div className="rounded-3xl border border-white/10 bg-black/10 p-4">
                     <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
-                      Status
+                      Estado
                     </p>
                     <p className="mt-3 text-lg font-semibold text-white">
-                      {isLoading ? 'Syncing' : error ? 'Attention' : 'Ready'}
+                      {isLoading
+                        ? 'Sincronizando'
+                        : error
+                          ? 'Atencion'
+                          : 'Listo'}
                     </p>
                   </div>
                 </div>
@@ -134,7 +138,7 @@ const AdminPanel = () => {
   if (!isAuthResolved) {
     return (
       <section className="flex h-screen items-center justify-center bg-slate-950 text-white">
-        Loading session...
+        Cargando sesión...
       </section>
     )
   }
@@ -153,15 +157,15 @@ const AdminPanel = () => {
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div className="space-y-3">
                 <span className="inline-flex rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-zinc-500">
-                  Overview
+                  Resumen
                 </span>
                 <div className="space-y-2">
                   <h1 className="text-3xl font-semibold text-white">
-                    Minimal admin dashboard
+                    Panel de administracion
                   </h1>
                   <p className="max-w-2xl text-sm leading-6 text-zinc-400">
-                    Keep track of daily bookings and client requests with a
-                    quieter interface.
+                    Controla turnos diarios y solicitudes de clientes desde una
+                    interfaz clara.
                   </p>
                 </div>
               </div>
@@ -169,7 +173,7 @@ const AdminPanel = () => {
               <div className="grid grid-cols-1 gap-3 sm:min-w-[280px] sm:grid-cols-2">
                 <div className="rounded-3xl border border-white/10 bg-black/10 p-4">
                   <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
-                    Today
+                    Hoy
                   </p>
                   <p className="mt-3 text-3xl font-semibold text-white">
                     {todayAppointments}
@@ -177,10 +181,14 @@ const AdminPanel = () => {
                 </div>
                 <div className="rounded-3xl border border-white/10 bg-black/10 p-4">
                   <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
-                    Status
+                    Estado
                   </p>
                   <p className="mt-3 text-lg font-semibold text-white">
-                    {isLoading ? 'Syncing' : error ? 'Attention' : 'Ready'}
+                    {isLoading
+                      ? 'Sincronizando'
+                      : error
+                        ? 'Atencion'
+                        : 'Listo'}
                   </p>
                 </div>
               </div>
