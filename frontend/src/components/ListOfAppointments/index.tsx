@@ -19,6 +19,18 @@ const statusLabels: Record<string, string> = {
   CANCELLED: 'Cancelled'
 }
 
+function getActionButtonClassName(variant: 'primary' | 'secondary' | 'danger') {
+  if (variant === 'primary') {
+    return 'flex h-11 items-center justify-center rounded-2xl border border-cyan-500/30 bg-cyan-500/10 px-4 text-cyan-100 transition hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-40'
+  }
+
+  if (variant === 'danger') {
+    return 'flex h-10 items-center justify-center rounded-2xl border border-red-500/25 px-4 text-red-100 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-40'
+  }
+
+  return 'flex h-10 items-center justify-center rounded-2xl border border-white/10 px-4 text-zinc-200 transition hover:border-white/20 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40'
+}
+
 function formatAppointmentDate(date: string) {
   return new Date(`${date}T00:00:00`).toLocaleDateString('en-US', {
     month: 'short',
@@ -164,54 +176,64 @@ const ListOfAppointments = ({
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2 lg:max-w-[18rem] lg:justify-end">
-                <button
-                  type="button"
-                  disabled={
-                    pendingActionId === appointment.id ||
-                    appointment.status === 'CONFIRMED'
-                  }
-                  onClick={() =>
-                    handleStatusUpdate(appointment.id, 'CONFIRMED')
-                  }
-                  className="h-10 rounded-2xl border border-cyan-500/30 px-4 text-sm font-medium text-cyan-100 transition hover:bg-cyan-500/10 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Confirm
-                </button>
-                <button
-                  type="button"
-                  disabled={
-                    pendingActionId === appointment.id ||
-                    appointment.status === 'COMPLETED'
-                  }
-                  onClick={() =>
-                    handleStatusUpdate(appointment.id, 'COMPLETED')
-                  }
-                  className="h-10 rounded-2xl border border-emerald-500/30 px-4 text-sm font-medium text-emerald-100 transition hover:bg-emerald-500/10 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Complete
-                </button>
-                <button
-                  type="button"
-                  disabled={
-                    pendingActionId === appointment.id ||
-                    appointment.status === 'CANCELLED'
-                  }
-                  onClick={() =>
-                    handleStatusUpdate(appointment.id, 'CANCELLED')
-                  }
-                  className="h-10 rounded-2xl border border-amber-500/30 px-4 text-sm font-medium text-amber-100 transition hover:bg-amber-500/10 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  disabled={pendingActionId === appointment.id}
-                  onClick={() => handleDelete(appointment.id)}
-                  className="h-10 rounded-2xl border border-red-500/30 px-4 text-sm font-medium text-red-100 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Delete
-                </button>
+              <div className="w-full overflow-x-auto lg:w-auto">
+                <div className="flex min-w-max items-center gap-2 lg:justify-end">
+                  <button
+                    type="button"
+                    title="Confirm"
+                    aria-label="Confirm appointment"
+                    disabled={
+                      pendingActionId === appointment.id ||
+                      appointment.status === 'CONFIRMED'
+                    }
+                    onClick={() =>
+                      handleStatusUpdate(appointment.id, 'CONFIRMED')
+                    }
+                    className={getActionButtonClassName('primary')}
+                  >
+                    <i className="fa-solid fa-check-double text-[16px]"></i>
+                  </button>
+                  <button
+                    type="button"
+                    title="Complete"
+                    aria-label="Mark appointment as completed"
+                    disabled={
+                      pendingActionId === appointment.id ||
+                      appointment.status === 'COMPLETED'
+                    }
+                    onClick={() =>
+                      handleStatusUpdate(appointment.id, 'COMPLETED')
+                    }
+                    className={getActionButtonClassName('secondary')}
+                  >
+                    <i className="fa-solid fa-circle-check text-[16px]"></i>
+                  </button>
+                  <button
+                    type="button"
+                    title="Cancel"
+                    aria-label="Cancel appointment"
+                    disabled={
+                      pendingActionId === appointment.id ||
+                      appointment.status === 'CANCELLED'
+                    }
+                    onClick={() =>
+                      handleStatusUpdate(appointment.id, 'CANCELLED')
+                    }
+                    className={getActionButtonClassName('secondary')}
+                  >
+                    <i className="fa-regular fa-calendar-xmark text-[16px]"></i>
+                  </button>
+                  <button
+                    type="button"
+                    title="Delete"
+                    aria-label="Delete appointment"
+                    disabled={pendingActionId === appointment.id}
+                    onClick={() => handleDelete(appointment.id)}
+                    className={getActionButtonClassName('danger')}
+                  >
+                    <i className="fa-solid fa-trash-can text-[16px]"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </article>
