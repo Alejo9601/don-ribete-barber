@@ -11,15 +11,29 @@ export class AppointmentDB {
 
   getAll() {
     return client.execute({
-      sql: 'SELECT appointments.id,date,time,clients.id AS client_id,name,lastname,email,phone_number FROM appointments JOIN clients ON appointments.client_id = clients.id ORDER BY date ASC',
+      sql: 'SELECT appointments.id,date,time,status,clients.id AS client_id,name,lastname,email,phone_number FROM appointments JOIN clients ON appointments.client_id = clients.id ORDER BY date ASC, time ASC',
       args: []
     })
   }
 
   getOccupiedSlots() {
     return client.execute({
-      sql: 'SELECT date, time FROM appointments ORDER BY date ASC, time ASC',
+      sql: "SELECT date, time FROM appointments WHERE status != 'CANCELLED' ORDER BY date ASC, time ASC",
       args: []
+    })
+  }
+
+  updateStatus(id: number, status: string) {
+    return client.execute({
+      sql: 'UPDATE appointments SET status = ? WHERE id = ? RETURNING id, date, time, status',
+      args: [status, id]
+    })
+  }
+
+  remove(id: number) {
+    return client.execute({
+      sql: 'DELETE FROM appointments WHERE id = ? RETURNING id',
+      args: [id]
     })
   }
 }

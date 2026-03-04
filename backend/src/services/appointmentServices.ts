@@ -15,6 +15,8 @@ interface AppointmentRecord {
   status?: string
 }
 
+const allowedStatuses = ['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED']
+
 function normalizeAppointment(appointmentData: AppointmentRecord) {
   const appointment: Appointment = {
     id: appointmentData.id,
@@ -67,4 +69,27 @@ export async function setAppointment(appointmentData: AppointmentRecord) {
 
   const result = await appDB.save(appointment, savedClientId)
   return result.rows[0]
+}
+
+export async function updateAppointmentStatus(id: number, status: string) {
+  if (!allowedStatuses.includes(status)) {
+    throw new Error('Invalid appointment status')
+  }
+
+  const appDB = new AppointmentDB()
+  const result = await appDB.updateStatus(id, status)
+  const row = result.rows[0]
+
+  if (!row) {
+    return null
+  }
+
+  return normalizeAppointment(row as unknown as AppointmentRecord)
+}
+
+export async function deleteAppointment(id: number) {
+  const appDB = new AppointmentDB()
+  const result = await appDB.remove(id)
+
+  return result.rows[0] ?? null
 }
