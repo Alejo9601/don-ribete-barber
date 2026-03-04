@@ -8,6 +8,8 @@ import ListOfAppointments from '../components/ListOfAppointments'
 import { useAppointments } from '../hooks/useAppointments'
 import { useAvailability } from '../hooks/useAvailability'
 import { AvailabilityEditor } from '../components/AvailabilityEditor'
+import { useServices } from '../hooks/useServices'
+import { ServiceCatalogEditor } from '../components/ServiceCatalogEditor'
 
 const bypassAdminAuth = import.meta.env.VITE_BYPASS_ADMIN_AUTH === 'true'
 
@@ -28,6 +30,14 @@ const AdminPanel = () => {
     isLoading: isAvailabilityLoading,
     error: availabilityError
   } = useAvailability()
+  const {
+    services,
+    setServices,
+    isLoading: isServicesLoading,
+    isSaving: isServicesSaving,
+    error: servicesError,
+    saveServices
+  } = useServices()
   const todayAppointments = appointments.filter(
     (appointment) => appointment.date === new Date().toISOString().split('T')[0]
   ).length
@@ -62,6 +72,19 @@ const AdminPanel = () => {
           initialAvailability={availability}
           isLoading={isAvailabilityLoading}
           error={availabilityError}
+        />
+      )
+    }
+
+    if (activeSection === 'services') {
+      return (
+        <ServiceCatalogEditor
+          services={services}
+          setServices={setServices}
+          isLoading={isServicesLoading}
+          isSaving={isServicesSaving}
+          error={servicesError}
+          onSave={saveServices}
         />
       )
     }

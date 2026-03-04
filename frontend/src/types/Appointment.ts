@@ -5,5 +5,6 @@ export interface Appointment {
   client: Client | undefined
   date: string
   time: string
+  service_name: string
   status: string
 }

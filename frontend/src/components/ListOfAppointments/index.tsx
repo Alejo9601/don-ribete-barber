@@ -171,6 +171,7 @@ const ListOfAppointments = ({
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-zinc-400">
                   <span>{formatAppointmentDate(appointment.date)}</span>
                   <span>{appointment.time}</span>
+                  <span>{appointment.service_name || 'Sin servicio'}</span>
                   <span>{appointment.client?.email || 'No email'}</span>
                   <span>{appointment.client?.phone_number || 'No phone'}</span>
                 </div>

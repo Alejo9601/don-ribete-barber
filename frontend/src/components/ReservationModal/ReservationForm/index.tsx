@@ -7,24 +7,10 @@ import { ModalClosingButton } from '../../ModalClosingButton'
 import { ReservationContext } from '../../../context/reservationContext'
 import { useAvailability } from '../../../hooks/useAvailability'
 import { useBookedSlots } from '../../../hooks/useBookedSlots'
+import { useServices } from '../../../hooks/useServices'
 
 const defaultDate = dayjs().hour(15).minute(0)
 dayjs.locale('es')
-
-// const initialClientState: Client = {
-//   id: undefined,
-//   name: '',
-//   lastname: '',
-//   email: '',
-//   phone_number: ''
-// }
-// const initialAppointmentState: Appointment = {
-//   id: undefined,
-//   client: undefined,
-//   date: '',
-//   time: '',
-//   service: undefined
-// }
 
 export default function ReservationForm({
   onReservationSubmit,
@@ -33,16 +19,13 @@ export default function ReservationForm({
   onReservationSubmit: () => void
   closeModal: () => void
 }) {
-  // const [clientData, setClientData] = useState<Client>(initialClientState)
-  // const [appointmentData, setAppointmentData] = useState<Appointment>(
-  //   initialAppointmentState
-  // )
-
   const reservation = useContext(ReservationContext)
   const { bookedSlots } = useBookedSlots()
   const { availability } = useAvailability()
+  const { services } = useServices()
   const [selectedDate, setSelectedDate] = useState<Dayjs>(defaultDate)
   const [selectedHour, setSelectedHour] = useState<string | null>('15:00')
+  const [selectedService, setSelectedService] = useState('')
 
   function shouldDisableDate(date: Dayjs) {
     if (date.day() === 0) {
@@ -110,6 +93,17 @@ export default function ReservationForm({
     })
   }
 
+  function onServiceChange(event: ChangeEvent<HTMLSelectElement>) {
+    const nextService = event.currentTarget.value
+    setSelectedService(nextService)
+
+    const { ...props } = reservation?.appointment
+    reservation?.updateAppointment({
+      ...props,
+      service_name: nextService
+    })
+  }
+
   function onTimeSelect(hour: string) {
     setSelectedHour(hour)
     const { ...props } = reservation?.appointment
@@ -165,6 +159,7 @@ export default function ReservationForm({
   }
 
   const availableHours = getAvailableHoursForDate(selectedDate)
+  const availableServices = services.filter((service) => service.enabled)
   const pickerTextFieldProps = {
     fullWidth: true,
     variant: 'outlined' as const,
@@ -253,6 +248,27 @@ export default function ReservationForm({
       </div>
       <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3 sm:p-4">
         <div className="flex flex-col gap-4">
+          <div className="space-y-3">
+            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500">
+              Servicio
+            </p>
+            <select
+              value={selectedService}
+              onChange={onServiceChange}
+              required
+              className="h-11 w-full rounded-2xl border border-zinc-200 bg-white px-4 text-sm text-zinc-800 outline-none transition focus:border-cyan-500"
+            >
+              <option value="">Selecciona un servicio</option>
+              {availableServices.map((service) => (
+                <option
+                  key={`service-option-${service.id}`}
+                  value={service.service_name}
+                >
+                  {`${service.service_name} - $${service.price}`}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="space-y-3">
             <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500">
               Fecha

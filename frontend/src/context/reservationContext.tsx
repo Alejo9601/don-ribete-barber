@@ -14,6 +14,7 @@ const initialAppointmentState: Appointment = {
   client: undefined,
   date: '',
   time: '',
+  service_name: '',
   status: 'PENDING'
 }
 

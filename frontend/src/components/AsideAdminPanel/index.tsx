@@ -1,11 +1,12 @@
 import { useLocation } from 'wouter'
 import { useUser } from '../../hooks/useUser'
 
-export type AdminSection = 'appointments' | 'availability'
+export type AdminSection = 'appointments' | 'availability' | 'services'
 
 const navigationItems: Array<{ id: AdminSection; label: string }> = [
   { id: 'appointments', label: 'Turnos' },
-  { id: 'availability', label: 'Disponibilidad' }
+  { id: 'availability', label: 'Disponibilidad' },
+  { id: 'services', label: 'Servicios' }
 ]
 
 const AsideAdminPanel = ({
