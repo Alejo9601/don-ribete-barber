@@ -1,3 +1,4 @@
+import { Link } from 'wouter'
 import { useState } from 'react'
 import SectionLink from './SectionLink'
 import BurgerButtonSVG from '../../SVGIcons/BurgerButtonSVG'
@@ -20,6 +21,14 @@ const Navbar = () => {
         <SectionLink refTo="/home">Inicio</SectionLink>
         <SectionLink refTo="/gallery">Nuestro trabajo</SectionLink>
         <SectionLink>Contacto</SectionLink>
+        <li className="mt-4 lg:hidden">
+          <Link
+            href="/admin-panel/home"
+            className="rounded-full border border-white/10 px-5 py-3 text-sm font-medium uppercase tracking-[0.18em] text-stone-200 transition hover:border-sky-300/40 hover:text-sky-300"
+          >
+            Admin
+          </Link>
+        </li>
         {/* <SectionLink>Acerca de</SectionLink> */}
       </ul>
     </nav>

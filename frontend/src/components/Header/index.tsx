@@ -11,7 +11,7 @@ export default function Header() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin-panel/home"
-          className="rounded-full border border-white/10 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.18em] text-stone-300 transition hover:border-sky-300/40 hover:text-sky-300"
+          className="hidden rounded-full border border-white/10 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.18em] text-stone-300 transition hover:border-sky-300/40 hover:text-sky-300 lg:inline-flex"
         >
           Admin
         </Link>
