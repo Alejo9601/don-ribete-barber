@@ -87,7 +87,7 @@ export function AvailabilityEditor({
           type="button"
           onClick={handleSave}
           disabled={isSaving || isLoading}
-          className="h-11 rounded-2xl bg-cyan-600 px-5 text-sm font-semibold text-white transition hover:bg-cyan-500 disabled:cursor-not-allowed disabled:bg-cyan-800/60"
+          className="h-11 w-full rounded-2xl bg-cyan-600 px-5 text-sm font-semibold text-white transition hover:bg-cyan-500 disabled:cursor-not-allowed disabled:bg-cyan-800/60 sm:w-auto"
         >
           {isSaving ? 'Saving...' : 'Save availability'}
         </button>

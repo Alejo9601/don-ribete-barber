@@ -7,7 +7,7 @@ const ServiceContainer = ({
   reversed: boolean
 }) => {
   return (
-    <article className="service flex translate-y-10 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-4 opacity-0 blur-[6px] transition-[opacity,transform,filter] duration-700 ease-out will-change-transform">
+    <article className="service flex translate-y-10 overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-3 opacity-0 blur-[6px] transition-[opacity,transform,filter] duration-700 ease-out will-change-transform sm:rounded-[2rem] sm:p-4">
       <div
         className={`flex h-fit w-full min-w-0 flex-col gap-6 ${reversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} lg:h-[320px] lg:items-stretch`}
       >

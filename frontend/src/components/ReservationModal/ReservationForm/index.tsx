@@ -199,15 +199,15 @@ export default function ReservationForm({
   return (
     <form
       onSubmit={handleFormSubmit}
-      className="relative flex w-full max-w-xl flex-col gap-4 rounded-[2rem] border border-white/10 bg-white p-5 text-zinc-900 shadow-[0_24px_80px_rgba(0,0,0,0.24)] md:p-6"
+      className="relative flex w-full max-w-xl flex-col gap-4 rounded-[1.75rem] border border-white/10 bg-white p-4 text-zinc-900 shadow-[0_24px_80px_rgba(0,0,0,0.24)] sm:p-5 md:rounded-[2rem] md:p-6"
     >
       <ModalClosingButton onClick={closeModal} />
-      <div className="space-y-3 pr-12">
+      <div className="space-y-3 pr-10 sm:pr-12">
         <p className="text-xs uppercase tracking-[0.35em] text-zinc-500">
           Reserva online
         </p>
         <div className="space-y-2">
-          <h2 className="text-2xl font-semibold leading-tight text-zinc-950 md:text-[1.75rem]">
+          <h2 className="text-xl font-semibold leading-tight text-zinc-950 sm:text-2xl md:text-[1.75rem]">
             Agenda tu turno
           </h2>
           <p className="max-w-lg text-[13px] leading-5 text-zinc-500">
@@ -251,7 +251,7 @@ export default function ReservationForm({
           onChange={onClientPhoneNumberChange}
         />
       </div>
-      <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+      <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3 sm:p-4">
         <div className="flex flex-col gap-4">
           <div className="space-y-3">
             <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500">
@@ -320,7 +320,7 @@ export default function ReservationForm({
       </section>
       <input
         type="submit"
-        className="mt-1 h-11 rounded-2xl bg-cyan-600 px-5 text-[13px] font-semibold uppercase tracking-[0.22em] text-white transition hover:bg-cyan-500"
+        className="mt-1 h-11 rounded-2xl bg-cyan-600 px-5 text-[12px] font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-cyan-500 sm:text-[13px] sm:tracking-[0.22em]"
         value="Agendar"
       />
     </form>

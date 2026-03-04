@@ -3,10 +3,10 @@ import SocialNetworks from '../SocialNetworks'
 
 const Footer = () => {
   return (
-    <footer className="w-full h-52 flex flex-col items-center justify-center bg-slate-900">
+    <footer className="flex w-full flex-col items-center justify-center gap-5 bg-slate-900 px-6 py-10 text-center sm:px-8">
       <SocialNetworks onHeader={false}></SocialNetworks>
-      <div className="flex flex-col">
-        <p className="text-white pb-3 pt-5">Designed and built by</p>
+      <div className="flex flex-col items-center">
+        <p className="pb-3 text-white">Designed and built by</p>
         <CreatorsLogo></CreatorsLogo>
       </div>
     </footer>

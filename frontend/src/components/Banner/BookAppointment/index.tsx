@@ -22,11 +22,11 @@ export default function BookAppointment() {
   return (
     <div className="z-[1] w-full max-w-[28rem]">
       <HeadingText />
-      <div className="mt-8 flex items-center gap-4">
-        <Button additionalProps="mt-0" onClick={handleOnClick}>
+      <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
+        <Button additionalProps="mt-0 w-full sm:w-auto" onClick={handleOnClick}>
           Agendar cita
         </Button>
-        <span className="text-sm uppercase tracking-[0.28em] text-stone-500">
+        <span className="text-xs uppercase tracking-[0.28em] text-stone-500 sm:text-sm">
           Patagon Barber
         </span>
       </div>

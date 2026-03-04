@@ -78,7 +78,7 @@ export function Gallery() {
 
   return (
     <VisitorsGeneralLayout>
-      <main className="bg-stone-100 py-10 text-zinc-900 md:py-14">
+      <main className="bg-stone-100 py-8 text-zinc-900 md:py-14">
         <WithMarginWrapper customClasses="space-y-8">
           <section className="border-b border-zinc-300 pb-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -97,7 +97,7 @@ export function Gallery() {
             </div>
           </section>
 
-          <section className="columns-1 gap-4 md:columns-2 xl:columns-3">
+          <section className="columns-1 gap-4 sm:columns-2 xl:columns-3">
             {galleryItems.map((item) => {
               return (
                 <article
@@ -137,7 +137,7 @@ export function Gallery() {
       </main>
       {previewItem ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4 py-8"
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/80 px-3 py-4 sm:px-4 sm:py-8 md:items-center"
           onClick={() => setPreviewItem(null)}
         >
           <div
@@ -146,7 +146,7 @@ export function Gallery() {
           >
             <button
               type="button"
-              className="absolute right-4 top-4 z-10 rounded-full bg-black/70 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-black"
+              className="absolute right-3 top-3 z-10 rounded-full bg-black/70 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-black sm:right-4 sm:top-4 sm:text-xs sm:tracking-[0.2em]"
               onClick={() => setPreviewItem(null)}
             >
               Cerrar
