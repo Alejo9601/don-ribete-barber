@@ -14,7 +14,7 @@ const initialAppointmentState: Appointment = {
   client: undefined,
   date: '',
   time: '',
-  service: undefined
+  status: 'PENDING'
 }
 
 interface Reservation {

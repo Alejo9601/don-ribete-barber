@@ -7,8 +7,10 @@ export function useAppointments() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    getAppointments()
+  function loadAppointments() {
+    setIsLoading(true)
+
+    return getAppointments()
       .then((response) => {
         setAppointments(response)
         setError('')
@@ -19,7 +21,17 @@ export function useAppointments() {
       .finally(() => {
         setIsLoading(false)
       })
+  }
+
+  useEffect(() => {
+    loadAppointments()
   }, [])
 
-  return { appointments, isLoading, error }
+  return {
+    appointments,
+    setAppointments,
+    isLoading,
+    error,
+    refreshAppointments: loadAppointments
+  }
 }

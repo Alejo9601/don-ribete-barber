@@ -14,7 +14,12 @@ const bypassAdminAuth = import.meta.env.VITE_BYPASS_ADMIN_AUTH === 'true'
 const AdminPanel = () => {
   const [, navigate] = useLocation()
   const { user, isAuthResolved, refreshSession } = useUser()
-  const { appointments, isLoading, error } = useAppointments()
+  const {
+    appointments,
+    setAppointments,
+    isLoading,
+    error
+  } = useAppointments()
   const [activeSection, setActiveSection] =
     useState<AdminSection>('appointments')
   const hasRetriedSession = useRef(false)
@@ -64,6 +69,7 @@ const AdminPanel = () => {
     return (
       <ListOfAppointments
         appointments={appointments}
+        setAppointments={setAppointments}
         isLoading={isLoading}
         error={error}
       />
@@ -72,7 +78,7 @@ const AdminPanel = () => {
 
   if (bypassAdminAuth) {
     return (
-      <section className="min-h-dvh bg-zinc-950 px-5 py-5 text-white sm:px-6 lg:h-dvh lg:overflow-hidden lg:px-8">
+      <section className="min-h-dvh bg-zinc-950 px-4 py-4 text-white sm:px-6 sm:py-5 lg:h-dvh lg:overflow-hidden lg:px-8">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(8,145,178,0.14),transparent_30%),radial-gradient(circle_at_right,rgba(255,255,255,0.04),transparent_24%)]"></div>
         <div className="relative mx-auto flex max-w-7xl flex-col gap-5 lg:h-full lg:flex-row">
           <AsideAdminPanel
@@ -98,7 +104,7 @@ const AdminPanel = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 sm:min-w-[280px]">
+                <div className="grid grid-cols-1 gap-3 sm:min-w-[280px] sm:grid-cols-2">
                   <div className="rounded-3xl border border-white/10 bg-black/10 p-4">
                     <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
                       Today
@@ -134,7 +140,7 @@ const AdminPanel = () => {
   }
 
   return user === undefined ? null : (
-    <section className="min-h-dvh bg-zinc-950 px-5 py-5 text-white sm:px-6 lg:h-dvh lg:overflow-hidden lg:px-8">
+    <section className="min-h-dvh bg-zinc-950 px-4 py-4 text-white sm:px-6 sm:py-5 lg:h-dvh lg:overflow-hidden lg:px-8">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(8,145,178,0.14),transparent_30%),radial-gradient(circle_at_right,rgba(255,255,255,0.04),transparent_24%)]"></div>
       <div className="relative mx-auto flex max-w-7xl flex-col gap-5 lg:h-full lg:flex-row">
         <AsideAdminPanel
@@ -160,7 +166,7 @@ const AdminPanel = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 sm:min-w-[280px]">
+              <div className="grid grid-cols-1 gap-3 sm:min-w-[280px] sm:grid-cols-2">
                 <div className="rounded-3xl border border-white/10 bg-black/10 p-4">
                   <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">
                     Today

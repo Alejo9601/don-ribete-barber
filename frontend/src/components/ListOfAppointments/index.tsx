@@ -1,4 +1,23 @@
 import { Appointment } from '../../types/Appointment'
+import {
+  deleteAppointment,
+  updateAppointmentStatus
+} from '../../services/appointmentServices'
+import { Dispatch, SetStateAction, useState } from 'react'
+
+const statusStyles: Record<string, string> = {
+  PENDING: 'border-amber-500/20 bg-amber-500/10 text-amber-100',
+  CONFIRMED: 'border-cyan-500/20 bg-cyan-500/10 text-cyan-100',
+  COMPLETED: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-100',
+  CANCELLED: 'border-red-500/20 bg-red-500/10 text-red-100'
+}
+
+const statusLabels: Record<string, string> = {
+  PENDING: 'Pending',
+  CONFIRMED: 'Confirmed',
+  COMPLETED: 'Completed',
+  CANCELLED: 'Cancelled'
+}
 
 function formatAppointmentDate(date: string) {
   return new Date(`${date}T00:00:00`).toLocaleDateString('en-US', {
@@ -17,13 +36,59 @@ function getClientDisplayName(appointment: Appointment) {
 
 const ListOfAppointments = ({
   appointments,
+  setAppointments,
   isLoading,
   error
 }: {
   appointments: Appointment[]
+  setAppointments: Dispatch<SetStateAction<Appointment[]>>
   isLoading: boolean
   error: string
 }) => {
+  const [pendingActionId, setPendingActionId] = useState<number | null>(null)
+  const [actionError, setActionError] = useState('')
+
+  async function handleStatusUpdate(id: number | undefined, status: string) {
+    if (id === undefined) {
+      return
+    }
+
+    try {
+      setPendingActionId(id)
+      setActionError('')
+      const updatedAppointment = await updateAppointmentStatus(id, status)
+
+      setAppointments((currentAppointments) =>
+        currentAppointments.map((appointment) =>
+          appointment.id === id ? updatedAppointment : appointment
+        )
+      )
+    } catch {
+      setActionError('Could not update appointment status.')
+    } finally {
+      setPendingActionId(null)
+    }
+  }
+
+  async function handleDelete(id: number | undefined) {
+    if (id === undefined) {
+      return
+    }
+
+    try {
+      setPendingActionId(id)
+      setActionError('')
+      await deleteAppointment(id)
+      setAppointments((currentAppointments) =>
+        currentAppointments.filter((appointment) => appointment.id !== id)
+      )
+    } catch {
+      setActionError('Could not delete appointment.')
+    } finally {
+      setPendingActionId(null)
+    }
+  }
+
   if (isLoading) {
     return (
       <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur lg:h-full">
@@ -65,6 +130,12 @@ const ListOfAppointments = ({
         </span>
       </div>
 
+      {actionError ? (
+        <p className="mb-4 rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+          {actionError}
+        </p>
+      ) : null}
+
       <div className="flex flex-col gap-3 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
         {appointments.map((appointment) => (
           <article
@@ -77,8 +148,12 @@ const ListOfAppointments = ({
                   <p className="text-base font-semibold text-white">
                     {getClientDisplayName(appointment)}
                   </p>
-                  <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-[11px] uppercase tracking-[0.24em] text-cyan-200">
-                    Pending
+                  <span
+                    className={`rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.24em] ${
+                      statusStyles[appointment.status] ?? statusStyles.PENDING
+                    }`}
+                  >
+                    {statusLabels[appointment.status] ?? appointment.status}
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-zinc-400">
@@ -89,9 +164,55 @@ const ListOfAppointments = ({
                 </div>
               </div>
 
-              <button className="h-11 rounded-2xl border border-white/10 px-4 text-sm font-medium text-white transition hover:border-cyan-400/40 hover:bg-cyan-500/10">
-                Confirm
-              </button>
+              <div className="flex flex-wrap gap-2 lg:max-w-[18rem] lg:justify-end">
+                <button
+                  type="button"
+                  disabled={
+                    pendingActionId === appointment.id ||
+                    appointment.status === 'CONFIRMED'
+                  }
+                  onClick={() =>
+                    handleStatusUpdate(appointment.id, 'CONFIRMED')
+                  }
+                  className="h-10 rounded-2xl border border-cyan-500/30 px-4 text-sm font-medium text-cyan-100 transition hover:bg-cyan-500/10 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Confirm
+                </button>
+                <button
+                  type="button"
+                  disabled={
+                    pendingActionId === appointment.id ||
+                    appointment.status === 'COMPLETED'
+                  }
+                  onClick={() =>
+                    handleStatusUpdate(appointment.id, 'COMPLETED')
+                  }
+                  className="h-10 rounded-2xl border border-emerald-500/30 px-4 text-sm font-medium text-emerald-100 transition hover:bg-emerald-500/10 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Complete
+                </button>
+                <button
+                  type="button"
+                  disabled={
+                    pendingActionId === appointment.id ||
+                    appointment.status === 'CANCELLED'
+                  }
+                  onClick={() =>
+                    handleStatusUpdate(appointment.id, 'CANCELLED')
+                  }
+                  className="h-10 rounded-2xl border border-amber-500/30 px-4 text-sm font-medium text-amber-100 transition hover:bg-amber-500/10 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={pendingActionId === appointment.id}
+                  onClick={() => handleDelete(appointment.id)}
+                  className="h-10 rounded-2xl border border-red-500/30 px-4 text-sm font-medium text-red-100 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </article>
         ))}

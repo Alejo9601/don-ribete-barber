@@ -47,6 +47,42 @@ export async function getAppointments() {
     })
 }
 
+export async function updateAppointmentStatus(id: number, status: string) {
+  const options: RequestInit = {
+    mode: 'cors',
+    method: 'PATCH',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
+    },
+    body: JSON.stringify({ status })
+  }
+
+  return fetch(getApiUrl(`/api/appointments/${id}/status`), options)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to update appointment status')
+      }
+
+      return response.json() as Promise<Appointment>
+    })
+}
+
+export async function deleteAppointment(id: number) {
+  const options: RequestInit = {
+    mode: 'cors',
+    method: 'DELETE',
+    credentials: 'include'
+  }
+
+  return fetch(getApiUrl(`/api/appointments/${id}`), options).then((response) => {
+    if (!response.ok) {
+      throw new Error('Failed to delete appointment')
+    }
+  })
+}
+
 export async function getOccupiedAppointmentSlots() {
   const options: RequestInit = {
     mode: 'cors',
