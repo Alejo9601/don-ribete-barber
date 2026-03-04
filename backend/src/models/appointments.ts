@@ -1,6 +1,8 @@
 import { Appointment } from '../types/Appointment'
 import { client } from './db_client'
 
+const shouldAutoSchema = process.env.DB_AUTO_SCHEMA === 'true'
+
 export class AppointmentDB {
   async ensureSchema() {
     const columns = await client.execute({
@@ -21,7 +23,9 @@ export class AppointmentDB {
   }
 
   async save(ap: Appointment, clientId: number) {
-    await this.ensureSchema()
+    if (shouldAutoSchema) {
+      await this.ensureSchema()
+    }
 
     return client.execute({
       sql: 'INSERT INTO appointments (client_id,date,time,status,service_name) VALUES(?,?,?,?,?) RETURNING id, date, time, status, service_name',
@@ -30,7 +34,9 @@ export class AppointmentDB {
   }
 
   async getAll() {
-    await this.ensureSchema()
+    if (shouldAutoSchema) {
+      await this.ensureSchema()
+    }
 
     return client.execute({
       sql: 'SELECT appointments.id,date,time,status,service_name,clients.id AS client_id,name,lastname,email,phone_number FROM appointments JOIN clients ON appointments.client_id = clients.id ORDER BY date ASC, time ASC',
@@ -39,7 +45,9 @@ export class AppointmentDB {
   }
 
   async getOccupiedSlots() {
-    await this.ensureSchema()
+    if (shouldAutoSchema) {
+      await this.ensureSchema()
+    }
 
     return client.execute({
       sql: "SELECT date, time FROM appointments WHERE status != 'CANCELLED' ORDER BY date ASC, time ASC",
@@ -48,7 +56,9 @@ export class AppointmentDB {
   }
 
   async getById(id: number) {
-    await this.ensureSchema()
+    if (shouldAutoSchema) {
+      await this.ensureSchema()
+    }
 
     return client.execute({
       sql: 'SELECT appointments.id,date,time,status,service_name,clients.id AS client_id,name,lastname,email,phone_number FROM appointments JOIN clients ON appointments.client_id = clients.id WHERE appointments.id = ?',
@@ -57,7 +67,9 @@ export class AppointmentDB {
   }
 
   async updateStatus(id: number, status: string) {
-    await this.ensureSchema()
+    if (shouldAutoSchema) {
+      await this.ensureSchema()
+    }
 
     return client.execute({
       sql: 'UPDATE appointments SET status = ? WHERE id = ? RETURNING id',
@@ -66,7 +78,9 @@ export class AppointmentDB {
   }
 
   async remove(id: number) {
-    await this.ensureSchema()
+    if (shouldAutoSchema) {
+      await this.ensureSchema()
+    }
 
     return client.execute({
       sql: 'DELETE FROM appointments WHERE id = ? RETURNING id',

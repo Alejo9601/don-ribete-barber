@@ -1,6 +1,8 @@
 import { client } from './db_client'
 import { AvailabilityDay } from '../types/Availability'
 
+const shouldAutoSchema = process.env.DB_AUTO_SCHEMA === 'true'
+
 const defaultHours = ['10:00', '11:00', '12:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00']
 
 const defaultAvailability: AvailabilityDay[] = Array.from({ length: 7 }, (_, dayOfWeek) => ({
@@ -28,7 +30,10 @@ export class AvailabilityDB {
   }
 
   async getAll() {
-    await this.ensureSchema()
+    if (shouldAutoSchema) {
+      await this.ensureSchema()
+    }
+
     return client.execute({
       sql: 'SELECT day_of_week, enabled, hours_json FROM availability_settings ORDER BY day_of_week ASC',
       args: []
@@ -36,7 +41,9 @@ export class AvailabilityDB {
   }
 
   async saveAll(days: AvailabilityDay[]) {
-    await this.ensureSchema()
+    if (shouldAutoSchema) {
+      await this.ensureSchema()
+    }
 
     for (const day of days) {
       await client.execute({

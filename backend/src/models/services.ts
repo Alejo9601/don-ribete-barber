@@ -1,6 +1,8 @@
 import { client } from './db_client'
 import { Service } from '../types/Service'
 
+const shouldAutoSchema = process.env.DB_AUTO_SCHEMA === 'true'
+
 const defaultServices: Array<{ service_name: string; price: number }> = [
   { service_name: 'Corte', price: 12000 },
   { service_name: 'Perfilado', price: 9000 },
@@ -71,7 +73,9 @@ export class ServiceDB {
   }
 
   async getAll() {
-    await this.ensureSchema()
+    if (shouldAutoSchema) {
+      await this.ensureSchema()
+    }
 
     return client.execute({
       sql: 'SELECT id, service_name, price, enabled FROM services ORDER BY id ASC',
@@ -80,7 +84,9 @@ export class ServiceDB {
   }
 
   async replaceAll(services: Service[]) {
-    await this.ensureSchema()
+    if (shouldAutoSchema) {
+      await this.ensureSchema()
+    }
 
     await client.execute({
       sql: 'DELETE FROM services',
