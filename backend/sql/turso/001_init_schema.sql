@@ -24,9 +24,18 @@ CREATE TABLE IF NOT EXISTS appointments (
   client_id INTEGER NOT NULL,
   date TEXT NOT NULL,
   time TEXT NOT NULL,
+  service_name TEXT NOT NULL DEFAULT '',
   status TEXT NOT NULL DEFAULT 'PENDING',
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS services (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  service_name TEXT NOT NULL UNIQUE,
+  price REAL NOT NULL DEFAULT 0,
+  enabled INTEGER NOT NULL DEFAULT 1 CHECK (enabled IN (0, 1)),
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS availability_settings (
@@ -53,3 +62,9 @@ VALUES
   (4, 1, '["10:00","11:00","12:00","15:00","16:00","17:00","18:00","19:00","20:00"]'),
   (5, 1, '["10:00","11:00","12:00","15:00","16:00","17:00","18:00","19:00","20:00"]'),
   (6, 1, '["10:00","11:00","12:00","15:00","16:00","17:00","18:00","19:00","20:00"]');
+
+INSERT OR IGNORE INTO services (id, service_name, price, enabled)
+VALUES
+  (1, 'Corte', 12000, 1),
+  (2, 'Perfilado', 9000, 1),
+  (3, 'Corte y perfilado', 18000, 1);

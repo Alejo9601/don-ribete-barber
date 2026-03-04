@@ -2,35 +2,72 @@ import { Appointment } from '../types/Appointment'
 import { client } from './db_client'
 
 export class AppointmentDB {
-  save(ap: Appointment, clientId: number) {
+  async ensureSchema() {
+    const columns = await client.execute({
+      sql: 'PRAGMA table_info(appointments)',
+      args: []
+    })
+
+    const hasServiceName = columns.rows.some(
+      (column) => String(column.name) === 'service_name'
+    )
+
+    if (!hasServiceName) {
+      await client.execute(`
+        ALTER TABLE appointments
+        ADD COLUMN service_name TEXT NOT NULL DEFAULT ''
+      `)
+    }
+  }
+
+  async save(ap: Appointment, clientId: number) {
+    await this.ensureSchema()
+
     return client.execute({
-      sql: 'INSERT INTO appointments (client_id,date,time,status) VALUES(?,?,?,?) RETURNING date, time',
-      args: [clientId, ap.date, ap.time, ap.status]
+      sql: 'INSERT INTO appointments (client_id,date,time,status,service_name) VALUES(?,?,?,?,?) RETURNING id, date, time, status, service_name',
+      args: [clientId, ap.date, ap.time, ap.status, ap.service_name]
     })
   }
 
-  getAll() {
+  async getAll() {
+    await this.ensureSchema()
+
     return client.execute({
-      sql: 'SELECT appointments.id,date,time,status,clients.id AS client_id,name,lastname,email,phone_number FROM appointments JOIN clients ON appointments.client_id = clients.id ORDER BY date ASC, time ASC',
+      sql: 'SELECT appointments.id,date,time,status,service_name,clients.id AS client_id,name,lastname,email,phone_number FROM appointments JOIN clients ON appointments.client_id = clients.id ORDER BY date ASC, time ASC',
       args: []
     })
   }
 
-  getOccupiedSlots() {
+  async getOccupiedSlots() {
+    await this.ensureSchema()
+
     return client.execute({
       sql: "SELECT date, time FROM appointments WHERE status != 'CANCELLED' ORDER BY date ASC, time ASC",
       args: []
     })
   }
 
-  updateStatus(id: number, status: string) {
+  async getById(id: number) {
+    await this.ensureSchema()
+
     return client.execute({
-      sql: 'UPDATE appointments SET status = ? WHERE id = ? RETURNING id, date, time, status',
+      sql: 'SELECT appointments.id,date,time,status,service_name,clients.id AS client_id,name,lastname,email,phone_number FROM appointments JOIN clients ON appointments.client_id = clients.id WHERE appointments.id = ?',
+      args: [id]
+    })
+  }
+
+  async updateStatus(id: number, status: string) {
+    await this.ensureSchema()
+
+    return client.execute({
+      sql: 'UPDATE appointments SET status = ? WHERE id = ? RETURNING id',
       args: [status, id]
     })
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    await this.ensureSchema()
+
     return client.execute({
       sql: 'DELETE FROM appointments WHERE id = ? RETURNING id',
       args: [id]

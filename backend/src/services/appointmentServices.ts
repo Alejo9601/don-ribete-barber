@@ -6,6 +6,8 @@ interface AppointmentRecord {
   id?: number
   date: string
   time: string
+  service?: string
+  service_name?: string
   client_id?: number
   name?: string
   lastname?: string
@@ -22,6 +24,7 @@ function normalizeAppointment(appointmentData: AppointmentRecord) {
     id: appointmentData.id,
     date: appointmentData.date,
     time: appointmentData.time,
+    service_name: appointmentData.service_name ?? appointmentData.service ?? '',
     client: {
       id: appointmentData.client_id || undefined,
       name: appointmentData.name ?? '',
@@ -84,7 +87,14 @@ export async function updateAppointmentStatus(id: number, status: string) {
     return null
   }
 
-  return normalizeAppointment(row as unknown as AppointmentRecord)
+  const updatedAppointment = await appDB.getById(Number(row.id))
+  const updatedRow = updatedAppointment.rows[0]
+
+  if (!updatedRow) {
+    return null
+  }
+
+  return normalizeAppointment(updatedRow as unknown as AppointmentRecord)
 }
 
 export async function deleteAppointment(id: number) {

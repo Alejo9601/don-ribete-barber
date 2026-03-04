@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import appointmentRouter from './src/routes/appointmentRouter'
 import userRouter from './src/routes/userRouter'
 import availabilityRouter from './src/routes/availabilityRouter'
+import serviceRouter from './src/routes/serviceRouter'
 
 dotenv.config()
 
@@ -23,6 +24,7 @@ app.use(
 
 app.use('/api/appointments', appointmentRouter)
 app.use('/api/availability', availabilityRouter)
+app.use('/api/services', serviceRouter)
 app.use('/api/admin-panel', userRouter)
 
 app.use((error: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
