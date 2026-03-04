@@ -1,6 +1,18 @@
 import { Dispatch, SetStateAction, useMemo, useState } from 'react'
 import { ServiceCatalog } from '../../types/ServiceCatalog'
 
+function getActionButtonClassName(variant: 'primary' | 'secondary' | 'danger') {
+  if (variant === 'primary') {
+    return 'flex h-10 items-center justify-center rounded-2xl border border-cyan-500/30 bg-cyan-500/10 px-3 text-cyan-100 transition hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-40'
+  }
+
+  if (variant === 'danger') {
+    return 'flex h-10 items-center justify-center rounded-2xl border border-red-500/25 px-3 text-red-100 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-40'
+  }
+
+  return 'flex h-10 items-center justify-center rounded-2xl border border-white/10 px-3 text-zinc-200 transition hover:border-white/20 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40'
+}
+
 export function ServiceCatalogEditor({
   services,
   setServices,
@@ -23,7 +35,10 @@ export function ServiceCatalogEditor({
     [services]
   )
 
-  function updateService(id: number, updater: (service: ServiceCatalog) => ServiceCatalog) {
+  function updateService(
+    id: number,
+    updater: (service: ServiceCatalog) => ServiceCatalog
+  ) {
     setServices((currentServices) =>
       currentServices.map((service) =>
         service.id === id ? updater(service) : service
@@ -101,8 +116,8 @@ export function ServiceCatalogEditor({
   }
 
   return (
-    <section className="rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur lg:flex lg:h-full lg:min-h-0 lg:flex-col">
-      <div className="mb-6 flex flex-col gap-3 border-b border-white/10 pb-5 lg:flex-row lg:items-end lg:justify-between">
+    <section className="rounded-[28px] border border-white/10 bg-white/5 p-4 backdrop-blur lg:flex lg:h-full lg:min-h-0 lg:flex-col">
+      <div className="mb-4 flex flex-col gap-3 border-b border-white/10 pb-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-white">Servicios</h3>
           <p className="text-sm text-zinc-400">
@@ -113,70 +128,98 @@ export function ServiceCatalogEditor({
           <button
             type="button"
             onClick={handleAddService}
-            className="h-11 flex-1 rounded-2xl border border-white/10 px-4 text-sm font-semibold text-zinc-200 transition hover:border-white/20 hover:bg-white/5 sm:flex-none"
+            title="Agregar servicio"
+            aria-label="Agregar servicio"
+            className={`${getActionButtonClassName('secondary')} flex-1 sm:flex-none`}
           >
-            Agregar
+            <i className="fa-solid fa-plus text-[14px]"></i>
           </button>
           <button
             type="button"
             onClick={handleSave}
             disabled={isSaving || isLoading}
-            className="h-11 flex-1 rounded-2xl bg-cyan-600 px-5 text-sm font-semibold text-white transition hover:bg-cyan-500 disabled:cursor-not-allowed disabled:bg-cyan-800/60 sm:flex-none"
+            title="Guardar servicios"
+            aria-label="Guardar servicios"
+            className={`${getActionButtonClassName('primary')} flex-1 sm:flex-none`}
           >
-            {isSaving ? 'Guardando...' : 'Guardar'}
+            <i
+              className={`text-[14px] ${
+                isSaving
+                  ? 'fa-solid fa-spinner fa-spin'
+                  : 'fa-solid fa-floppy-disk'
+              }`}
+            ></i>
           </button>
         </div>
       </div>
 
-      {feedback ? <p className="mb-4 text-sm text-zinc-300">{feedback}</p> : null}
+      {feedback ? (
+        <p className="mb-4 text-sm text-zinc-300">{feedback}</p>
+      ) : null}
       {error ? <p className="mb-4 text-sm text-amber-200">{error}</p> : null}
       {isLoading ? (
         <p className="mb-4 text-sm text-zinc-400">Cargando servicios...</p>
       ) : null}
 
-      <div className="grid gap-4 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
-        {sortedServices.map((service) => (
-          <article
-            key={service.id}
-            className="rounded-3xl border border-white/10 bg-black/10 p-4"
-          >
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <input
-                value={service.service_name}
-                onChange={(event) => handleNameChange(service.id, event.currentTarget.value)}
-                className="h-11 flex-1 rounded-2xl border border-white/10 bg-black/20 px-4 text-sm text-white placeholder:text-zinc-500"
-                placeholder="Nombre del servicio"
-                maxLength={45}
-              />
-              <input
-                type="number"
-                min={0}
-                value={service.price}
-                onChange={(event) => handlePriceChange(service.id, event.currentTarget.value)}
-                className="h-11 w-full rounded-2xl border border-white/10 bg-black/20 px-4 text-sm text-white placeholder:text-zinc-500 sm:w-32"
-                placeholder="Precio"
-              />
-              <button
-                type="button"
-                onClick={() => handleToggleService(service.id)}
-                className={`h-11 rounded-2xl px-4 text-xs font-semibold uppercase tracking-[0.18em] transition ${
-                  service.enabled
-                    ? 'bg-emerald-500/15 text-emerald-200 hover:bg-emerald-500/25'
-                    : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'
-                }`}
-              >
-                {service.enabled ? 'Activo' : 'Oculto'}
-              </button>
-              <button
-                type="button"
-                onClick={() => handleDeleteService(service.id)}
-                className="h-11 rounded-2xl border border-red-500/30 px-4 text-sm font-medium text-red-100 transition hover:bg-red-500/10"
-              >
-                Eliminar
-              </button>
-            </div>
-          </article>
-        ))}
+      <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+        <div className="grid auto-rows-max gap-3">
+          {sortedServices.map((service) => (
+            <article
+              key={service.id}
+              className="rounded-3xl border border-white/10 bg-black/10 p-3"
+            >
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <input
+                  value={service.service_name}
+                  onChange={(event) =>
+                    handleNameChange(service.id, event.currentTarget.value)
+                  }
+                  className="h-10 flex-1 rounded-2xl border border-white/10 bg-black/20 px-3 text-sm text-white placeholder:text-zinc-500"
+                  placeholder="Nombre del servicio"
+                  maxLength={45}
+                />
+                <input
+                  type="number"
+                  min={0}
+                  value={service.price}
+                  onChange={(event) =>
+                    handlePriceChange(service.id, event.currentTarget.value)
+                  }
+                  className="h-10 w-full rounded-2xl border border-white/10 bg-black/20 px-3 text-sm text-white placeholder:text-zinc-500 sm:w-28"
+                  placeholder="Precio"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleToggleService(service.id)}
+                  title={
+                    service.enabled ? 'Ocultar servicio' : 'Activar servicio'
+                  }
+                  aria-label={
+                    service.enabled ? 'Ocultar servicio' : 'Activar servicio'
+                  }
+                  className={getActionButtonClassName('secondary')}
+                >
+                  <i
+                    className={`text-[14px] ${
+                      service.enabled
+                        ? 'fa-solid fa-eye'
+                        : 'fa-solid fa-eye-slash'
+                    }`}
+                  ></i>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteService(service.id)}
+                  title="Eliminar servicio"
+                  aria-label="Eliminar servicio"
+                  className={getActionButtonClassName('danger')}
+                >
+                  <i className="fa-solid fa-trash-can text-[14px]"></i>
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   )
