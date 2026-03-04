@@ -61,7 +61,7 @@ export function ServiceCatalogEditor({
   }
 
   function handlePriceChange(id: number, price: string) {
-    const parsedPrice = Number(price)
+    const parsedPrice = Number(price.replace('$', ''))
 
     updateService(id, (service) => ({
       ...service,
@@ -179,9 +179,8 @@ export function ServiceCatalogEditor({
                   maxLength={45}
                 />
                 <input
-                  type="number"
-                  min={0}
-                  value={service.price}
+                  type="string"
+                  value={'$ ' + service.price.toString()}
                   onChange={(event) =>
                     handlePriceChange(service.id, event.currentTarget.value)
                   }
