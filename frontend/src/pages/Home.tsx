@@ -48,14 +48,11 @@ const Home = () => {
       <main className="bg-stone-950 py-20">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 lg:px-10">
           <p className="text-sm uppercase tracking-[0.3em] text-stone-500">
-            Servicios
+            Nuestros servicios
           </p>
           <h1 className="max-w-2xl text-3xl font-semibold text-white md:text-5xl">
             Lo esencial, bien hecho.
           </h1>
-          <p className="max-w-2xl text-base leading-7 text-stone-400">
-            Un menu corto, claro y pensado para reservar rapido.
-          </p>
         </div>
         <BusinessServices></BusinessServices>
         <PreFooter></PreFooter>

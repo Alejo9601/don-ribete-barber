@@ -27,7 +27,7 @@ export default function BookAppointment() {
           Agendar cita
         </Button>
         <span className="text-xs uppercase tracking-[0.28em] text-stone-500 sm:text-sm">
-          Patagon Barber
+          DON RIBETE
         </span>
       </div>
 
