@@ -26,6 +26,10 @@ const AsideAdminPanel = ({
     navigate('/admin-panel/login', { replace: true })
   }
 
+  function handleBackToHome() {
+    navigate('/home')
+  }
+
   return (
     <aside className="flex w-full max-w-none flex-col rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur lg:max-w-xs lg:h-[calc(100dvh-2.5rem)] lg:sticky lg:top-5">
       <div className="space-y-3 border-b border-white/10 pb-5">
@@ -66,7 +70,13 @@ const AsideAdminPanel = ({
         ))}
       </nav>
 
-      <div className="mt-6 border-t border-white/10 pt-5">
+      <div className="mt-6 space-y-2 border-t border-white/10 pt-5">
+        <button
+          onClick={handleBackToHome}
+          className="w-full rounded-2xl border border-white/10 px-4 py-3 text-left text-sm font-medium text-zinc-300 transition hover:border-cyan-400/40 hover:bg-cyan-500/10 hover:text-cyan-100"
+        >
+          Volver al inicio
+        </button>
         <button
           onClick={handleLogout}
           className="w-full rounded-2xl border border-white/10 px-4 py-3 text-left text-sm font-medium text-zinc-300 transition hover:border-red-400/40 hover:bg-red-500/10 hover:text-red-100"
