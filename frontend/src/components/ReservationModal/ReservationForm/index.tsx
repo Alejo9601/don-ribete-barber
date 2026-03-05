@@ -1,7 +1,8 @@
-import { DatePicker } from '@mui/x-date-pickers'
+import { DesktopDatePicker } from '@mui/x-date-pickers'
 import dayjs, { Dayjs } from 'dayjs'
 import 'dayjs/locale/es'
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react'
+import { useMediaQuery } from '@mui/material'
 import { FormInput } from '../../FormInput'
 import { ModalClosingButton } from '../../ModalClosingButton'
 import { ReservationContext } from '../../../context/reservationContext'
@@ -10,6 +11,17 @@ import { useBookedSlots } from '../../../hooks/useBookedSlots'
 import { useServices } from '../../../hooks/useServices'
 
 const defaultDate = dayjs()
+const fallbackHours = [
+  '10:00',
+  '11:00',
+  '12:00',
+  '15:00',
+  '16:00',
+  '17:00',
+  '18:00',
+  '19:00',
+  '20:00'
+]
 dayjs.locale('es')
 
 export default function ReservationForm({
@@ -20,26 +32,30 @@ export default function ReservationForm({
   closeModal: () => void
 }) {
   const reservation = useContext(ReservationContext)
+  const isDesktop = useMediaQuery('(min-width:1024px)')
   const { bookedSlots, isLoading: isBookedSlotsLoading } = useBookedSlots()
   const { availability, isLoading: isAvailabilityLoading } = useAvailability()
   const { services } = useServices()
   const [selectedDate, setSelectedDate] = useState<Dayjs>(defaultDate)
   const [selectedHour, setSelectedHour] = useState<string | null>(null)
   const [selectedService, setSelectedService] = useState('')
+  const [dateFieldError, setDateFieldError] = useState('')
 
   function shouldDisableDate(date: Dayjs) {
     if (date.day() === 0) {
       return true
     }
 
+    if (isAvailabilityLoading || isBookedSlotsLoading) {
+      return false
+    }
+
+    if (availability.length === 0) {
+      return false
+    }
+
     return getAvailableHoursForDate(date).length === 0
   }
-
-  // function shouldDisableTime(dateTime: Dayjs) {
-  //   const hour = Number(dateTime.toISOString().split('T')[1].split(':')[0])
-
-  //   return false
-  // }
 
   function onClientNameChange(event: ChangeEvent<HTMLInputElement>) {
     const newValue = event.currentTarget.value
@@ -82,6 +98,13 @@ export default function ReservationForm({
 
     setSelectedDate(date)
     setSelectedHour(null)
+
+    const { ...props } = reservation?.appointment
+    reservation?.updateAppointment({
+      ...props,
+      date: dayjs(date).format('YYYY-MM-DD'),
+      time: ''
+    })
   }
 
   function onServiceChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -119,6 +142,10 @@ export default function ReservationForm({
   }
 
   function getConfiguredHoursForDate(date: Dayjs) {
+    if (availability.length === 0) {
+      return date.day() === 0 ? [] : fallbackHours
+    }
+
     const dayAvailability = availability.find(
       (day) => day.dayOfWeek === date.day()
     )
@@ -157,22 +184,13 @@ export default function ReservationForm({
   const availableServices = services.filter((service) => service.enabled)
 
   useEffect(() => {
-    const dateValue = selectedDate.format('YYYY-MM-DD')
     const { ...props } = reservation?.appointment
 
     reservation?.updateAppointment({
       ...props,
-      date: dateValue
+      date: selectedDate.format('YYYY-MM-DD')
     })
-  }, [reservation, selectedDate])
-
-  useEffect(() => {
-    const { ...props } = reservation?.appointment
-    reservation?.updateAppointment({
-      ...props,
-      time: selectedHour ?? ''
-    })
-  }, [reservation, selectedHour])
+  }, [])
   const pickerTextFieldProps = {
     fullWidth: true,
     variant: 'outlined' as const,
@@ -188,6 +206,7 @@ export default function ReservationForm({
         borderRadius: '1rem',
         backgroundColor: '#fafafa',
         fontSize: '0.95rem',
+        paddingRight: '0.2rem',
         '& input': {
           paddingTop: '0.45rem',
           paddingBottom: '0.45rem',
@@ -207,6 +226,72 @@ export default function ReservationForm({
     }
   }
 
+  const pickerCommonProps = {
+    value: selectedDate,
+    format: 'dddd D [de] MMMM [de] YYYY',
+    onChange: (value: Dayjs | null) => {
+      if (value !== null) {
+        setSelectedDate(value)
+        setSelectedHour(null)
+
+        const { ...props } = reservation?.appointment
+        reservation?.updateAppointment({
+          ...props,
+          date: dayjs(value).format('YYYY-MM-DD'),
+          time: ''
+        })
+      }
+    },
+    disablePast: true,
+    showDaysOutsideCurrentMonth: false,
+    shouldDisableDate,
+    onAccept: onDateAccept,
+    views: ['year', 'month', 'day'] as const,
+    slotProps: {
+      textField: pickerTextFieldProps,
+      openPickerButton: {
+        sx: {
+          display: 'inline-flex',
+          marginRight: '0.1rem',
+          color: '#52525b'
+        }
+      },
+      inputAdornment: {
+        sx: {
+          marginRight: 0
+        }
+      }
+    }
+  }
+
+  function onMobileDateChange(nextValue: string) {
+    if (!nextValue) {
+      return
+    }
+
+    const nextDate = dayjs(nextValue)
+
+    if (!nextDate.isValid()) {
+      return
+    }
+
+    if (nextDate.day() === 0) {
+      setDateFieldError('Los domingos no hay turnos disponibles.')
+      return
+    }
+
+    setDateFieldError('')
+    setSelectedDate(nextDate)
+    setSelectedHour(null)
+
+    const { ...props } = reservation?.appointment
+    reservation?.updateAppointment({
+      ...props,
+      date: nextDate.format('YYYY-MM-DD'),
+      time: ''
+    })
+  }
+
   return (
     <form
       onSubmit={handleFormSubmit}
@@ -221,10 +306,6 @@ export default function ReservationForm({
           <h2 className="text-xl font-semibold leading-tight text-zinc-950 sm:text-2xl md:text-[1.75rem]">
             Agenda tu turno
           </h2>
-          {/* <p className="max-w-lg text-[13px] leading-5 text-zinc-500">
-            Completa tus datos y elige fecha y horario. El formulario esta
-            pensado para reservar rapido y sin vueltas.
-          </p> */}
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
@@ -289,34 +370,30 @@ export default function ReservationForm({
             <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500">
               Fecha
             </p>
-            <DatePicker
-              value={selectedDate}
-              format="dddd D [de] MMMM [de] YYYY"
-              onChange={(value) => {
-                if (value !== null) {
-                  setSelectedDate(value)
-                  setSelectedHour(null)
-                }
-              }}
-              disablePast={true}
-              showDaysOutsideCurrentMonth={false}
-              shouldDisableDate={shouldDisableDate}
-              onAccept={onDateAccept}
-              views={['year', 'month', 'day']}
-              slotProps={{
-                textField: pickerTextFieldProps,
-                popper: {
-                  sx: {
-                    zIndex: 1600
+            {isDesktop ? (
+              <DesktopDatePicker
+                {...pickerCommonProps}
+                slotProps={{
+                  ...pickerCommonProps.slotProps,
+                  popper: {
+                    sx: {
+                      zIndex: 1600
+                    }
                   }
-                },
-                mobilePaper: {
-                  sx: {
-                    zIndex: 1600
-                  }
-                }
-              }}
-            ></DatePicker>
+                }}
+              />
+            ) : (
+              <input
+                type="date"
+                value={selectedDate.format('YYYY-MM-DD')}
+                min={dayjs().format('YYYY-MM-DD')}
+                onChange={(event) => onMobileDateChange(event.currentTarget.value)}
+                className="h-9 w-full rounded-2xl border border-zinc-200 bg-white px-4 text-sm text-zinc-800 outline-none transition focus:border-cyan-500"
+              />
+            )}
+            {dateFieldError ? (
+              <p className="text-[12px] text-amber-600">{dateFieldError}</p>
+            ) : null}
           </div>
           <div className="space-y-3">
             <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500">
