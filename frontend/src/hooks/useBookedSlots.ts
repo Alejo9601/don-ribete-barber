@@ -4,6 +4,7 @@ import { getOccupiedAppointmentSlots } from '../services/appointmentServices'
 
 export function useBookedSlots() {
   const [bookedSlots, setBookedSlots] = useState<BookedSlot[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -15,7 +16,10 @@ export function useBookedSlots() {
       .catch(() => {
         setError('No se pudieron cargar los horarios ocupados.')
       })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }, [])
 
-  return { bookedSlots, error }
+  return { bookedSlots, isLoading, error }
 }

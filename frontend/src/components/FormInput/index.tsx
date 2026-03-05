@@ -23,7 +23,7 @@ export function FormInput({
         {label}
       </span>
       <input
-        className="h-10 rounded-2xl border border-zinc-200 bg-zinc-50 px-3.5 text-sm font-medium text-zinc-900 transition placeholder:text-zinc-400 focus:border-cyan-500 focus:bg-white"
+        className="h-9 rounded-2xl border border-zinc-200 bg-zinc-50 px-3.5 text-sm font-medium text-zinc-900 transition placeholder:text-zinc-400 focus:border-cyan-500 focus:bg-white"
         type={type}
         name={name}
         placeholder={placeholder}

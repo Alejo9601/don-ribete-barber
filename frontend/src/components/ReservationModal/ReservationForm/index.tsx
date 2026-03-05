@@ -1,7 +1,7 @@
 import { DatePicker } from '@mui/x-date-pickers'
 import dayjs, { Dayjs } from 'dayjs'
 import 'dayjs/locale/es'
-import { ChangeEvent, FormEvent, useContext, useState } from 'react'
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react'
 import { FormInput } from '../../FormInput'
 import { ModalClosingButton } from '../../ModalClosingButton'
 import { ReservationContext } from '../../../context/reservationContext'
@@ -9,7 +9,7 @@ import { useAvailability } from '../../../hooks/useAvailability'
 import { useBookedSlots } from '../../../hooks/useBookedSlots'
 import { useServices } from '../../../hooks/useServices'
 
-const defaultDate = dayjs().hour(15).minute(0)
+const defaultDate = dayjs()
 dayjs.locale('es')
 
 export default function ReservationForm({
@@ -20,11 +20,11 @@ export default function ReservationForm({
   closeModal: () => void
 }) {
   const reservation = useContext(ReservationContext)
-  const { bookedSlots } = useBookedSlots()
-  const { availability } = useAvailability()
+  const { bookedSlots, isLoading: isBookedSlotsLoading } = useBookedSlots()
+  const { availability, isLoading: isAvailabilityLoading } = useAvailability()
   const { services } = useServices()
   const [selectedDate, setSelectedDate] = useState<Dayjs>(defaultDate)
-  const [selectedHour, setSelectedHour] = useState<string | null>('15:00')
+  const [selectedHour, setSelectedHour] = useState<string | null>(null)
   const [selectedService, setSelectedService] = useState('')
 
   function shouldDisableDate(date: Dayjs) {
@@ -82,15 +82,6 @@ export default function ReservationForm({
 
     setSelectedDate(date)
     setSelectedHour(null)
-
-    const settledDate = dayjs(date).format('YYYY-MM-DD HH:00')
-    const dateValue = settledDate.split(' ')[0]
-
-    const { ...props } = reservation?.appointment
-    reservation?.updateAppointment({
-      ...props,
-      date: dateValue
-    })
   }
 
   function onServiceChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -150,7 +141,10 @@ export default function ReservationForm({
         return false
       }
 
-      if (isToday && dayjs(`${date.format('YYYY-MM-DD')} ${hour}`).isBefore(currentTime)) {
+      if (
+        isToday &&
+        dayjs(`${date.format('YYYY-MM-DD')} ${hour}`).isBefore(currentTime)
+      ) {
         return false
       }
 
@@ -159,7 +153,26 @@ export default function ReservationForm({
   }
 
   const availableHours = getAvailableHoursForDate(selectedDate)
+  const isHoursLoading = isBookedSlotsLoading || isAvailabilityLoading
   const availableServices = services.filter((service) => service.enabled)
+
+  useEffect(() => {
+    const dateValue = selectedDate.format('YYYY-MM-DD')
+    const { ...props } = reservation?.appointment
+
+    reservation?.updateAppointment({
+      ...props,
+      date: dateValue
+    })
+  }, [reservation, selectedDate])
+
+  useEffect(() => {
+    const { ...props } = reservation?.appointment
+    reservation?.updateAppointment({
+      ...props,
+      time: selectedHour ?? ''
+    })
+  }, [reservation, selectedHour])
   const pickerTextFieldProps = {
     fullWidth: true,
     variant: 'outlined' as const,
@@ -171,10 +184,13 @@ export default function ReservationForm({
         textTransform: 'uppercase'
       },
       '& .MuiOutlinedInput-root': {
+        height: '2.25rem',
         borderRadius: '1rem',
         backgroundColor: '#fafafa',
         fontSize: '0.95rem',
         '& input': {
+          paddingTop: '0.45rem',
+          paddingBottom: '0.45rem',
           fontSize: '0.9rem',
           color: '#18181b'
         },
@@ -205,10 +221,10 @@ export default function ReservationForm({
           <h2 className="text-xl font-semibold leading-tight text-zinc-950 sm:text-2xl md:text-[1.75rem]">
             Agenda tu turno
           </h2>
-          <p className="max-w-lg text-[13px] leading-5 text-zinc-500">
+          {/* <p className="max-w-lg text-[13px] leading-5 text-zinc-500">
             Completa tus datos y elige fecha y horario. El formulario esta
             pensado para reservar rapido y sin vueltas.
-          </p>
+          </p> */}
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
@@ -256,7 +272,7 @@ export default function ReservationForm({
               value={selectedService}
               onChange={onServiceChange}
               required
-              className="h-11 w-full rounded-2xl border border-zinc-200 bg-white px-4 text-sm text-zinc-800 outline-none transition focus:border-cyan-500"
+              className="h-9 w-full rounded-2xl border border-zinc-200 bg-white px-4 text-sm text-zinc-800 outline-none transition focus:border-cyan-500"
             >
               <option value="">Selecciona un servicio</option>
               {availableServices.map((service) => (
@@ -279,6 +295,7 @@ export default function ReservationForm({
               onChange={(value) => {
                 if (value !== null) {
                   setSelectedDate(value)
+                  setSelectedHour(null)
                 }
               }}
               disablePast={true}
@@ -305,31 +322,37 @@ export default function ReservationForm({
             <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-500">
               Horarios disponibles
             </p>
-            <div className="flex flex-wrap gap-2">
-              {availableHours.length > 0 ? (
-                availableHours.map((hour) => {
-                  const isSelected = selectedHour === hour
+            <div className="min-h-[5rem] overflow-y-auto pr-1">
+              <div className="flex flex-wrap gap-2">
+                {isHoursLoading ? (
+                  <span className="text-[13px] text-zinc-500">
+                    Cargando horarios...
+                  </span>
+                ) : availableHours.length > 0 ? (
+                  availableHours.map((hour) => {
+                    const isSelected = selectedHour === hour
 
-                  return (
-                    <button
-                      key={`select-hour-${hour}`}
-                      type="button"
-                      className={`rounded-full border px-3 py-1.5 text-[13px] font-medium transition ${
-                        isSelected
-                          ? 'border-cyan-600 bg-cyan-600 text-white'
-                          : 'border-zinc-200 bg-white text-zinc-700 hover:border-cyan-400 hover:text-cyan-700'
-                      }`}
-                      onClick={() => onTimeSelect(hour)}
-                    >
-                      {hour}
-                    </button>
-                  )
-                })
-              ) : (
-                <span className="text-[13px] text-zinc-500">
-                  No quedan horarios libres para este dia.
-                </span>
-              )}
+                    return (
+                      <button
+                        key={`select-hour-${hour}`}
+                        type="button"
+                        className={`rounded-full border px-3 py-1.5 text-[13px] font-medium transition ${
+                          isSelected
+                            ? 'border-cyan-600 bg-cyan-600 text-white'
+                            : 'border-zinc-200 bg-white text-zinc-700 hover:border-cyan-400 hover:text-cyan-700'
+                        }`}
+                        onClick={() => onTimeSelect(hour)}
+                      >
+                        {hour}
+                      </button>
+                    )
+                  })
+                ) : (
+                  <span className="text-[13px] text-zinc-500">
+                    No quedan horarios libres para este dia.
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </div>
